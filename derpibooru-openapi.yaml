@@ -1,0 +1,213 @@
+openapi: 3.0.0
+info:
+  title: Derpibooru API
+  version: 0.0.1
+  description: |
+    Unofficial api doccumentation for [https://derpibooru.org](https://derpibooru.org).
+
+    Note that because the Derpibooru api is weird, I won't guarantee that the properties/methods/etc described here will allways be correct \[](/rdwut).
+  termsOfService: https://derpibooru.org/pages/rules
+externalDocs:
+  description: "Find out less about Derpibooru's api"
+  url: "https://derpibooru.org/pages/api"
+servers:
+ - url: https://derpibooru.org
+   description: Main canonical domain
+ - url: https://trixiebooru.org
+   description: Great and powerfull alternate domain.
+tags:
+- name: Images
+- name: Users
+- name: Tags
+- name: Lists
+paths:
+  /{ImageId}.json:
+    get:
+      tags:
+      - Images
+      summary: Gets an image by Id.
+      operationId: getImageById
+      parameters:
+      - name: ImageId
+        in: path
+        description: The Id of the image to get.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image'
+        '404':
+          description: Image not found.
+components:
+  schemas:
+    Image:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The image's id.
+        created_at:
+          type: string
+          format: date-time
+          description: An ISO 8601 date string representing when the image was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: An ISO 8601 date string representing when the image was uploaded.
+        first_seen_at:
+          type: string
+          format: date-time
+          description: An ISO 8601 date string representing when the image was first seen.
+        score:
+          type: integer
+          description: The cumulative score of an image (upvotes - downvotes).
+        comment_count:
+          type: integer
+          description: The number of comments an image has.
+        width:
+          type: integer
+          description: The width of an image in pixels.
+        height:
+          type: integer
+          description: The height of an image in pixels.
+        file_name:
+          type: string
+          description: The original filename of an image.
+        description:
+          type: string
+          description: The description of an image (Using derpibooru's formatting syntax).
+        uploader:
+          type: string
+          description: The name of the uploader.
+        uploader_id:
+          type: integer
+          nullable: true
+          description: The id of the uploader, or `null` if it was uploaded anonymously.
+        image:
+          type: string
+          format: uri
+          description: The canonical direct url for the image.
+        upvotes:
+          type: integer
+          description: The number of upvotes the image has.
+        downvotes:
+          type: integer
+          description: The number of downvotes the image has.
+        faves:
+          type: integer
+          description: The number of users who have favorited the image.
+        tags:
+          type: string
+          description: A string containing a list of tags for the image.
+        tag_ids:
+          type: array
+          description: An array of Tag Ids for the image.
+          items:
+            type: integer
+            description: The Id of the Tag
+          uniqueItems: true
+        aspect_ratio:
+          type: number
+          description: The aspect ratio of the image.
+        original_format:
+          type: string
+          description: The original format of the image (jpeg/png/svg).
+        mime_type:
+          type: string
+          description: The original mime type of the image.
+        sha512_hash:
+          type: string
+          format: sha512
+          description: The sha512 hash of the image.
+        orig_sha512_hash:
+          type: string
+          format: sha512
+          description: The original sha512 hash of the image.
+        source_url:
+          type: string
+          format: uri
+          description: The source url of the image.
+        representations:
+          type: object
+          properties:
+            thumb_tiny:
+              type: string
+              format: uri
+              description: The tiny thumbnail for the image.
+            thumb_small:
+              type: string
+              format: uri
+              description: The small thumbnail for the image.
+            thumb:
+              type: string
+              format: uri
+              description: The thumbnail for the image.
+            small:
+              type: string
+              format: uri
+              description: The small preview of the image.
+            medium:
+              type: string
+              format: uri
+              description: The medium preview of the image.
+            large:
+              type: string
+              format: uri
+              description: The large preview of the image.
+            tall:
+              type: string
+              format: uri
+              description: The tall preview of the image.
+            full:
+              type: string
+              format: uri
+              description: The full image.
+        is_rendered:
+          type: boolean
+          description: Whether or not the image's previews/thumbnails have been rendered.
+        is_optimized:
+          type: boolean
+          description: Whether or not the image's previews/thumbnails have been optimized.
+        interactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Interaction'
+          description: An array of interactions the current user has done to an image.
+    Interaction:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The id of the interaction.
+        interaction_type:
+          type: string
+          enum: [faved, voted, hidden]
+          description: |
+            The type of interaction.
+
+            Options:
+             * `faved`  - The user favorited the image.
+             * `voted`  - The user voted on the image.
+             * `hidden` - The user hid the image.
+        value:
+          type: string
+          nullable: true
+          description: The value of the interaction. (For example, "voted" interaction types can have a value of "up" or "down")
+        user_id:
+          type: integer
+          description: The id of the user who made the interaction.
+        image_id:
+          type: integer
+          description: The id of the image which the interaction is for.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: query
+      name: key
+
+
