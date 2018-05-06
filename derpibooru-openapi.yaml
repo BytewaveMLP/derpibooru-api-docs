@@ -5,7 +5,7 @@ info:
   description: |
     Unofficial api doccumentation for [https://derpibooru.org](https://derpibooru.org).
 
-    Note that because the Derpibooru api is weird, I won't guarantee that the properties/methods/etc described here will allways be correct \[](/rdwut).
+    Note that because the Derpibooru api is weird, I won't guarantee that the properties/methods/etc described here will always be correct \[](/rdwut).
   termsOfService: https://derpibooru.org/pages/rules
 externalDocs:
   description: "Find out less about Derpibooru's api"
@@ -19,6 +19,7 @@ tags:
 - name: Images
 - name: Users
 - name: Tags
+- name: Comments
 - name: Lists
 paths:
   /{ImageId}.json:
