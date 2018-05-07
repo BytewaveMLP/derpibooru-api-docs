@@ -16,7 +16,7 @@ info:
     > Credit MUST always be given to the site in the form of a link. If images are used, the artist MUST always be credited (if provided) and the original source URL MUST be displayed alongside the image, either in textual form or as a link. A link to the Derpibooru page is optional but recommended; we recommend the derpibooru.org domain as a canonical domain. The https protocol MUST be specified on all URIs; Derpibooru does not support plaintext HTTP connections.
     >
     > ### Accessing the API
-    > Most methods support API access by appending the extension .json to a URL. For requests that require authentication, the URL parameter "key" should be appended. This key provides limited access to a user"s account. This key can be found by users on their account page. For instance, to access a user"s watched feed, the request /images/watched.json?key=-Od-dTiwcf9dN2djrhlN would be made.
+    > Most methods support API access by appending the extension .json to a URL. For requests that require authentication, the URL parameter "key" should be appended. This key provides limited access to a user's account. This key can be found by users on their account page. For instance, to access a user"s watched feed, the request /images/watched.json?key=-Od-dTiwcf9dN2djrhlN would be made.
     >
     > Methods dealing with large feeds are paginated; the "page" parameter controls the page you're on. The number of images per page can be set with the "perpage" parameter. The default is 15 unless you use your key and have changed the "Images per page" option on the settings page.
     >
@@ -26,10 +26,10 @@ info:
     Since the api is a bit funny and has some quirks, I'll clarify and explain some things myself:
     
     ### Endpoints
-    Derpibooru's API endpoints are the same as normal pages. You can get API data from MOST pages by appending `.json` to the URL or adding an `Accept: application/json` HTTP header to your request. For example: To get the data for image 1 (https://derpibooru.org/1), you would make a request to https://derpibooru.org/1.json.
+    Derpibooru's API endpoints are the same as normal pages. You can get API data from MOST pages by appending `.json` to the URL or adding an `Accept: application/json` HTTP header to your request. For example: To get the data for image 1 ([https://derpibooru.org/1](https://derpibooru.org/1)), you would make a request to [https://derpibooru.org/1](https://derpibooru.org/1.json).
 
     ### Authentication
-    Some requests, like getting a user's watched images, require you to be authenticated as a user. This is done by adding a `key` URL parameter with the user's API Key. For example: https://derpibooru.org/images/watched.json?key=-Od-dTiwcf9dN2djrhlN
+    Some requests, like getting a user's watched images, require you to be authenticated as a user. This is done by adding a `key` URL parameter with the user's API Key. For example: [https://derpibooru.org/images/watched.json?key=-Od-dTiwcf9dN2djrhlN](https://derpibooru.org/images/watched.json?key=-Od-dTiwcf9dN2djrhlN).
     API Keys provide limited access to a user's account and can be found on their account page. They seem to be static and I can't find a way to change/revoke them so be careful not to leak it!
     
     ### Filters
