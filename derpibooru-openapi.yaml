@@ -50,7 +50,31 @@ paths:
       tags:
       - Images
       summary: Gets an image by Id.
+      description: Gets the details for an image from it's Id.
       operationId: getImageById
+      parameters:
+      - name: ImageId
+        in: path
+        description: The Id of the image to get.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image'
+        '404':
+          description: Image not found.
+  /images/{ImageId}.json:
+    get:
+      tags:
+      - Images
+      summary: Gets an image by Id.
+      description: Gets the details for an image from it's Id. This endpoint is the same as `/{ImageId}.json`
+      operationId: getImageById2
       parameters:
       - name: ImageId
         in: path
