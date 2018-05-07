@@ -6,10 +6,33 @@ info:
     Unofficial api doccumentation for [https://derpibooru.org](https://derpibooru.org).
 
     Note that because the Derpibooru api is weird, I won't guarantee that the properties/methods/etc described here will always be correct \[](/rdwut).
+
+    ## From the official docs:
+    > ### API
+    > Derpibooru provides a JSON API for major site functionality, which can be freely used by anyone wanting to produce tools for the site or other webapps that use the data provided within Derpibooru.
+    > ### Licensing
+    > Licensing of the API is simple - anyone can use it, users making abusively high numbers of requests may be asked to stop. Your application MUST properly cache, respect server-side cache expiry times. Your client MUST gracefully back off if requests fail (eg non-200 HTTP code), preferably exponentially or fatally.
+    >
+    > Credit MUST always be given to the site in the form of a link. If images are used, the artist MUST always be credited (if provided) and the original source URL MUST be displayed alongside the image, either in textual form or as a link. A link to the Derpibooru page is optional but recommended; we recommend the derpibooru.org domain as a canonical domain. The https protocol MUST be specified on all URIs; Derpibooru does not support plaintext HTTP connections.
+    >
+    > ### Accessing the API
+    > Most methods support API access by appending the extension .json to a URL. For requests that require authentication, the URL parameter "key" should be appended. This key provides limited access to a user"s account. This key can be found by users on their account page. For instance, to access a user"s watched feed, the request /images/watched.json?key=-Od-dTiwcf9dN2djrhlN would be made.
+    >
+    > Methods dealing with large feeds are paginated; the "page" parameter controls the page you're on. The number of images per page can be set with the "perpage" parameter. The default is 15 unless you use your key and have changed the "Images per page" option on the settings page.
+    >
+    > Search endpoints are controlled by the current user's filter (or the default, if no key is supplied); if you wish to use a custom filter, you can use the "filter_id" parameter.
+
+    ## Client Libraries:
+     - [node-derpi](https://github.com/BytewaveMLP/node-derpi) (node.js)
+     - [DerPyBooru](https://github.com/joshua-stone/DerPyBooru) (Python)
+     - [derpigo](https://github.com/Xe/derpigo) (Go)
+
+    ## Other Links:
+
   termsOfService: https://derpibooru.org/pages/rules
 externalDocs:
-  description: "Find out less about Derpibooru's api"
-  url: "https://derpibooru.org/pages/api"
+  description: Derpibooru's official api docs (good luck)
+  url: https://derpibooru.org/pages/api
 servers:
  - url: https://derpibooru.org
    description: Main canonical domain
