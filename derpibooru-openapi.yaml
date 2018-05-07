@@ -331,10 +331,12 @@ components:
           description: The number of forum topics the user has started.
         links:
           type: "array"
+          description: An array of links connecting this user to their artist tags/etc.
           items:
             $ref: '#/components/schemas/UserLink'
         awards:
           type: "array"
+          description: An array of awards this user has earned.
           items:
             $ref: '#/components/schemas/UserAward'
             type: "object"
