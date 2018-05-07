@@ -3,7 +3,7 @@ info:
   title: Derpibooru API
   version: 0.0.1
   description: |
-    Unofficial api doccumentation for [https://derpibooru.org](https://derpibooru.org).
+    Unofficial api documentation for [https://derpibooru.org](https://derpibooru.org).
 
     Note that because the Derpibooru api is weird, I won't guarantee that the properties/methods/etc described here will always be correct \[](/rdwut).
 
