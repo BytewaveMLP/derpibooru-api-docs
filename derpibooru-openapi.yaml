@@ -91,9 +91,38 @@ paths:
                 $ref: '#/components/schemas/Image'
         '404':
           description: Image not found.
+  /profiles/{UserNameOrId}:
+    get:
+      tags:
+      - Users
+      summary: Gets a User's profile.
+      description: |
+        Gets a User's profile by their Name or Id.
+
+        **Warning:** Names take precedence over Ids, so a request for `1234` might actually return the User *named* `1234` instead of the User with Id `1234`! The current suggested workaround is to double check that the response's `id` matches the requested Id and if not, retry with a 0 appended to the requested Id until you get the right user :)
+      operationId: getUserProfile
+      parameters:
+      - name: UserNameOrId
+        in: path
+        description: The Name or Id of the User to get.
+        required: true
+        schema:
+          oneOf:
+          - type: integer
+          - type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found.
 components:
   schemas:
     Image:
+      description: An image.
       type: object
       properties:
         id:
@@ -227,6 +256,7 @@ components:
             $ref: '#/components/schemas/Interaction'
           description: An array of interactions the current user has done to an image.
     Interaction:
+      description: An interaction.
       type: object
       properties:
         id:
@@ -252,6 +282,107 @@ components:
         image_id:
           type: integer
           description: The id of the image which the interaction is for.
+    User:
+      description: A user's profile.
+      type: object
+      properties:
+        id:
+          type: number
+          description: The id of the user.
+        name:
+          type: string
+          description: The name of the user.
+        slug:
+          type: string
+          format: uri
+          description: The url slug of the user.
+        role:
+          type: string
+          enum: [admin, moderator, user]
+          description: |
+            The role of the user.
+
+            Options:
+             * `admin` - A site Administrator.
+             * `moderator` - A site Moderator.
+             * `user` - A normal User.
+        description:
+          type: string
+          description: The user's profile description.
+        avatar_url:
+          type: string
+          format: uri
+          description: The user's avatar.
+        created_at:
+          type: string
+          format: date-time
+          description: An ISO 8601 date string representing when the user was created.
+        comment_count:
+          type: number
+          description: The number of comments the user has made.
+        uploads_count:
+          type: number
+          description: The number of images the user has uploaded.
+        post_count:
+          type: number
+          description: The number of form posts the user has made.
+        topic_count:
+          type: number
+          description: The number of forum topics the user has started.
+        links:
+          type: "array"
+          items:
+            $ref: '#/components/schemas/UserLink'
+        awards:
+          type: "array"
+          items:
+            $ref: '#/components/schemas/UserAward'
+            type: "object"
+    UserLink:
+      description: Links a user to a tag. From the web interface, it looks like it should have a url as well but it doesn't include that for some reason?
+      type: object
+      properties:
+        user_id:
+          type: number
+          description: The id of the user.
+        created_at:
+          type: string
+          format: date-time
+          description: An ISO 8601 date string representing when the user link was created.
+        state:
+          type: string
+          enum: [verified, unverified]
+          description: |
+            The state of the link.
+
+            Options:
+             * `verified`  - The link has been verified.
+             * `unverified?` - The link has been verified. (I'm guessing on this one - someone should make a new link and test this for me :P)
+        tag_id:
+          type: number
+          description: The id of the tag.
+    UserAward:
+      description: An award for a user. Also known as a profile badge.
+      type: object
+      properties:
+        image_url:
+          type: string
+          format: uri
+          description: The award's icon.
+        title:
+          type: string
+          description: The name of the award.
+        label:
+          type: string
+          nullable: true
+          description: A short description of the award.
+        id:
+          type: number
+          description: The id of the user award.
+        awarded_on:
+          type: string
+          format: date-time
+          description: An ISO 8601 date string representing when the user was given the award.
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
