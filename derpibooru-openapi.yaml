@@ -26,7 +26,7 @@ info:
     Since the api is a bit funny and has some quirks, I'll clarify and explain some things myself:
 
     ### Endpoints v1
-    Derpibooru's API v1 endpoints are the same as normal pages. You can get API data from MOST pages by appending `.json` to the URL or adding an `Accept: application/json` HTTP header to your request. For example: To get the data for image 1 ([https://derpibooru.org/1](https://derpibooru.org/1)), you would make a request to [https://derpibooru.org/1](https://derpibooru.org/1.json).
+    Derpibooru's API v1 endpoints are the same as normal pages. You can get API data from MOST pages by appending `.json` to the URL or adding an `Accept: application/json` HTTP header to your request. For example: To get the data for image 1 ([https://derpibooru.org/1](https://derpibooru.org/1)), you would make a request to [https://derpibooru.org/1.json](https://derpibooru.org/1.json).
 
     ### Endpoints v2
     A few years ago, v2 of the API started showing up, using a semi-standard url structure: `/api/v2/{entity}/{endpoint}.json`. It's never been documented and is still pretty inconsistent.
