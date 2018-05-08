@@ -96,16 +96,16 @@ info:
      - GET https://derpibooru.org/api/v2/interactions/interacted.json?class=Image&ids=1725734
        - Used to be https://derpibooru.org/api/v2/interactions/interacted.json?class=Image&ids=556feeed636872357b110d00, looks like the id format changed sometime? Maybe [here](https://derpibooru.org/meta/api-update/post/2354568#post_2354568)?
      - PUT https://derpibooru.org/api/v2/interactions/fave
-       - > `{"class":"Image","id":"1722317","value":"true","_method":"PUT"}`
-       - < `{"score":758,"favourites":581,"upvotes":758,"downvotes":0,"votes":758}`
+       - `> {"class":"Image","id":"1722317","value":"true","_method":"PUT"}`
+       - `< {"score":758,"favourites":581,"upvotes":758,"downvotes":0,"votes":758}`
        - value = true | false
      - PUT https://derpibooru.org/api/v2/interactions/vote
-       - > `{"class":"Image","id":"1696887","value":"down","_method":"PUT"}`
-       - < `{"score":170,"favourites":114,"upvotes":177,"downvotes":7,"votes":184}`
+       - `> {"class":"Image","id":"1696887","value":"down","_method":"PUT"}`
+       - `< {"score":170,"favourites":114,"upvotes":177,"downvotes":7,"votes":184}`
        - value = up | down | false
      - PUT https://derpibooru.org/api/v2/interactions/hide
-       - > `{"class":"Image","id":"1702318","value":"true","_method":"PUT"}`
-       - < `{"score":4,"favourites":18,"upvotes":23,"downvotes":19,"votes":42}`
+       - `> {"class":"Image","id":"1702318","value":"true","_method":"PUT"}`
+       - `< {"score":4,"favourites":18,"upvotes":23,"downvotes":19,"votes":42}`
        - value = true | false
 
     ## Client Libraries:
