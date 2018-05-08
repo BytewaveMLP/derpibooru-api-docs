@@ -24,19 +24,71 @@ info:
 
     ## Overview
     Since the api is a bit funny and has some quirks, I'll clarify and explain some things myself:
-    
+
     ### Endpoints
     Derpibooru's API endpoints are the same as normal pages. You can get API data from MOST pages by appending `.json` to the URL or adding an `Accept: application/json` HTTP header to your request. For example: To get the data for image 1 ([https://derpibooru.org/1](https://derpibooru.org/1)), you would make a request to [https://derpibooru.org/1](https://derpibooru.org/1.json).
 
     ### Authentication
     Some requests, like getting a user's watched images, require you to be authenticated as a user. This is done by adding a `key` URL parameter with the user's API Key. For example: [https://derpibooru.org/images/watched.json?key=-Od-dTiwcf9dN2djrhlN](https://derpibooru.org/images/watched.json?key=-Od-dTiwcf9dN2djrhlN).
     API Keys provide limited access to a user's account and can be found on their account page. They seem to be static and I can't find a way to change/revoke them so be careful not to leak it!
-    
+
     ### Filters
     All image searches are limited by the current filter. Authenticated requests will always use the currently selected filter for that user. Unauthenticated requests will default to the "default" filter, but a different one can be chosen by using the `filter_id` URL Parameter. You can use any filter with this parameter - even ones that aren't public.
-    
+
     ### Pagination
-    Many results on Derpibooru are paginated. The `page` URL Parameter can be used to to control what page you're on. Some endpoints allow the use of a `perpage` URL Parameter to specify how many results to show per page, though this is rather inconsistent (some endpoints use the current user's settings or only allow the default). 
+    Many results on Derpibooru are paginated. The `page` URL Parameter can be used to to control what page you're on. Some endpoints allow the use of a `perpage` URL Parameter to specify how many results to show per page, though this is rather inconsistent (some endpoints use the current user's settings or only allow the default).
+
+    ### TODO:
+    This is just a list of endpoints I've found that I need to document, you can ignore this •c•
+     - GET https://derpibooru.org/images.json
+     - GET https://derpibooru.org/images/{ImageId}/comments.json?page=2
+     - GET https://derpibooru.org/images/{ImageId}/comments_home.json
+     - GET https://derpibooru.org/images/{ImageId}/tag_changes.json
+     - GET https://derpibooru.org/filters.json
+     - GET https://derpibooru.org/filters/{FilterId}.json
+     - GET https://derpibooru.org/channels.json
+     - GET https://derpibooru.org/channels/{ChannelId}.json
+     - GET https://derpibooru.org/messages.json
+     - GET https://derpibooru.org/messages/{MessageSlug}.json
+     - GET https://derpibooru.org/messages/hide/{MessageId}
+     - POST https://derpibooru.org/messages/hide_batch
+        - Form!
+     - GET https://derpibooru.org/posts/posted.json
+     - GET https://derpibooru.org/tags.json
+     - GET https://derpibooru.org/tags/ratings.json
+     - GET https://derpibooru.org/tags/aliases.json
+     - GET https://derpibooru.org/tags/implied.json
+     - GET https://derpibooru.org/tags/{TagNameOrId}.json
+     - GET https://derpibooru.org/{ForumName}.json
+     - GET https://derpibooru.org/{ForumName}/{TopicName}.json
+     - GET https://derpibooru.org/{ForumName}/{TopicName}/{PageNumber}.json
+     - GET https://derpibooru.org/{ForumName}/{TopicName}/post/{PostId}.json
+       - returns the page the post is on, not the post itself
+     - GET https://derpibooru.org/forums/{ForumName}.json
+     - GET https://derpibooru.org/forums/{ForumName}/{TopicName}.json
+     - GET https://derpibooru.org/lists.json?last=24h
+       - last defaults to 3d
+     - GET https://derpibooru.org/lists/recent_comments.json
+     - GET https://derpibooru.org/galleries.json
+     - GET https://derpibooru.org/galleries/{UserNameOrId}.json
+     - GET https://derpibooru.org/galleries/{UserNameOrId}/{GalleryId}.json
+       - UserNameOrId is not required and will redirect to the correct one
+     - GET https://derpibooru.org/api/v2/tags/fetch_many.json?ids[]={TagId1}&ids[]={TagId2...}
+     - GET https://derpibooru.org/api/v2/tags/show.json?id={TagId}
+     - GET https://derpibooru.org/api/v2/users/fetch_many.json?ids[]={UserId1}&ids[]={UserId2...}
+     - GET https://derpibooru.org/api/v2/users/show.json?id={UserId}
+     - PUT https://derpibooru.org/api/v2/interactions/fave
+       - > `{"class":"Image","id":"1722317","value":"true","_method":"PUT"}`
+       - < `{"score":758,"favourites":581,"upvotes":758,"downvotes":0,"votes":758}`
+       - value = true | false
+     - PUT https://derpibooru.org/api/v2/interactions/vote
+       - > `{"class":"Image","id":"1696887","value":"down","_method":"PUT"}`
+       - < `{"score":170,"favourites":114,"upvotes":177,"downvotes":7,"votes":184}`
+       - value = up | down | false
+     - PUT https://derpibooru.org/api/v2/interactions/hide
+       - > `{"class":"Image","id":"1702318","value":"true","_method":"PUT"}`
+       - < `{"score":4,"favourites":18,"upvotes":23,"downvotes":19,"votes":42}`
+       - value = true | false
 
     ## Client Libraries:
      - [node-derpi](https://github.com/BytewaveMLP/node-derpi) (node.js)
