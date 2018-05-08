@@ -47,6 +47,8 @@ info:
     ### TODO:
     This is just a list of endpoints I've found that I need to document, you can ignore this •c•
      - GET https://derpibooru.org/images.json
+     - GET https://derpibooru.org/images/page/1.json
+        - Apparently used to have an &fav=true parameter? [[ref]](https://derpibooru.org/meta/breaking-api-changes/post/1295882#post_1295882)
      - GET https://derpibooru.org/images/{ImageId}/comments.json?page=2
      - GET https://derpibooru.org/images/{ImageId}/comments_home.json
      - GET https://derpibooru.org/images/{ImageId}/tag_changes.json
@@ -99,6 +101,7 @@ info:
        - `> {"class":"Image","id":"1722317","value":"true","_method":"PUT"}`
        - `< {"score":758,"favourites":581,"upvotes":758,"downvotes":0,"votes":758}`
        - value = true | false
+       - Reportedly also works in the format /api/v2/interactions/fave?class=Image&id=image_id&value=true - will need tested [[ref]](https://derpibooru.org/meta/userscript-derpibooru-image-slideshow/post/1276458#post_1276458)
      - PUT https://derpibooru.org/api/v2/interactions/vote
        - `> {"class":"Image","id":"1696887","value":"down","_method":"PUT"}`
        - `< {"score":170,"favourites":114,"upvotes":177,"downvotes":7,"votes":184}`
