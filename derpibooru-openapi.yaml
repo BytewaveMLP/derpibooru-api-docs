@@ -56,7 +56,7 @@ info:
      - [X] GET https://derpibooru.org/filters/{FilterId}.json
      - [X] GET https://derpibooru.org/channels.json
      - [X] GET https://derpibooru.org/channels/{ChannelId}.json
-     - GET https://derpibooru.org/comment/{CommentId}.json
+     - [X] GET https://derpibooru.org/comment/{CommentId}.json
      - GET https://derpibooru.org/messages.json
      - GET https://derpibooru.org/messages/{MessageSlug}.json
      - GET https://derpibooru.org/messages/hide/{MessageId}
@@ -605,6 +605,29 @@ paths:
                 $ref: '#/components/schemas/Channel'
         '404':
           description: Channel not found!
+  /comment/{CommentId}.json:
+    get:
+      tags:
+      - Comments
+      summary: Gets a comment.
+      description: Gets a comment by it's Id.
+      operationId: getCommentById
+      parameters:
+      - name: CommentId
+        in: path
+        description: The Id of the comment.
+        required: true
+        schema:
+          type: number
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '404':
+          description: Comment not found
   /profiles/{UserNameOrId}:
     get:
       tags:
