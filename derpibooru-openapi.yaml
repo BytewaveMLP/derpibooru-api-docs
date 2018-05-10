@@ -52,7 +52,7 @@ info:
      - [X] GET https://derpibooru.org/images/{ImageId}/comments.json?page=2
      - [X] GET https://derpibooru.org/images/{ImageId}/comments_home.json
      - [X] GET https://derpibooru.org/images/{ImageId}/tag_changes.json
-     - GET https://derpibooru.org/filters.json
+     - [X] GET https://derpibooru.org/filters.json
      - GET https://derpibooru.org/filters/{FilterId}.json
      - GET https://derpibooru.org/channels.json
      - GET https://derpibooru.org/channels/{ChannelId}.json
@@ -487,6 +487,49 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/TagChange'
+  /filters.json:
+    get:
+      tags:
+      - Filters
+      summary: Gets or searches for available filters.
+      description: Gets or searches for available filters.
+      operationId: getFilters
+      parameters:
+      - name: fq
+        in: query
+        description: An optional search query. Results will be in `search_filters`.
+        required: false
+        schema:
+          type: string
+      - name: search_desc
+        in: query
+        description: If present, search through filter descriptions. Can be any value.
+        allowEmptyValue: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  system_filters:
+                    description: An array of the system filters.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Filter'
+                  user_filters:
+                    description: An array of the filters the current user created.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Filter'
+                  search_filters:
+                    description: An array of filter search results.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Filter'
   /profiles/{UserNameOrId}:
     get:
       tags:
@@ -864,7 +907,63 @@ components:
         user:
           type: string
           description: The name of the user who changed the tag.
-
+    Filter:
+      description: A search filter.
+      type: object
+      properties:
+        id:
+          type: number
+          description: The id of the filter.
+        name:
+          type: string
+          description: The name of the filter.
+        description:
+          type: string
+          description: The description of the filter.
+        hidden_tag_ids:
+          type: array
+          description: An array of tag ids that are hidden.
+          items:
+            type: number
+            description: The hidden tag's id.
+        spoilered_tag_ids:
+          type: array
+          description: An array of tag ids that are spoilered.
+          items:
+            type: number
+            description: The spoilered tag's id.
+        spoilered_tags:
+          type: array
+          description: An array of tag names that are spoilered.
+          items:
+            type: string
+            description: The spoilered tag's name.
+        hidden_tags:
+          type: array
+          description: An array of tag namess that are hidden.
+          items:
+            type: string
+            description: The hidden tag's name.
+        hidden_complex:
+          type: string
+          description: A complex filter for images to hide.
+        spoilered_complex:
+          type: string
+          description: A complex filter for images to spoiler.
+        public:
+          type: boolean
+          description: Whether or not the filter is public.
+        system:
+          type: boolean
+          description: Whether or not the filter is a system filter.
+        user_count:
+          type: integer
+          description: The number of users that are using the filter.
+          minimum: 0
+        user_id:
+          type: number
+          description: The id of the user who made the filter.
+          nullable: true
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
