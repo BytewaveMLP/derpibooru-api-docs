@@ -463,7 +463,7 @@ paths:
       - Tags
       summary: Gets an image's tag changes.
       description: Gets an image's tag changes. **These results are not ordered!**
-      operationId: getImageCommentsPaged
+      operationId: getImageTagChanges
       parameters:
       - name: ImageId
         in: path
