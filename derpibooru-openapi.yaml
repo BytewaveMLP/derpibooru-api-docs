@@ -55,7 +55,7 @@ info:
      - [X] GET https://derpibooru.org/filters.json
      - [X] GET https://derpibooru.org/filters/{FilterId}.json
      - [X] GET https://derpibooru.org/channels.json
-     - GET https://derpibooru.org/channels/{ChannelId}.json
+     - [X] GET https://derpibooru.org/channels/{ChannelId}.json
      - GET https://derpibooru.org/comment/{CommentId}.json
      - GET https://derpibooru.org/messages.json
      - GET https://derpibooru.org/messages/{MessageSlug}.json
@@ -545,7 +545,7 @@ paths:
         description: The Id of the filter.
         required: true
         schema:
-          type: integer
+          type: number
       responses:
         '200':
           description: Successful operation
@@ -582,6 +582,29 @@ paths:
                 description: An array of channels.
                 items:
                   $ref: '#/components/schemas/Channel'
+  /channels/{ChannelId}.json:
+    get:
+      tags:
+      - Channels
+      summary: Gets a channel.
+      description: Gets a channel by it's Id.
+      operationId: getChannelById
+      parameters:
+      - name: ChannelId
+        in: path
+        description: The Id of the channel.
+        required: true
+        schema:
+          type: number
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Channel'
+        '404':
+          description: Channel not found!
   /profiles/{UserNameOrId}:
     get:
       tags:
