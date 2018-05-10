@@ -49,7 +49,7 @@ info:
      - [X] GET https://derpibooru.org/images.json
      - [X] GET https://derpibooru.org/images/page/1.json
         - Apparently used to have an &fav=true parameter? [[ref]](https://derpibooru.org/meta/breaking-api-changes/post/1295882#post_1295882)
-     - GET https://derpibooru.org/images/{ImageId}/comments.json?page=2
+     - [X] GET https://derpibooru.org/images/{ImageId}/comments.json?page=2
      - [X] GET https://derpibooru.org/images/{ImageId}/comments_home.json
      - GET https://derpibooru.org/images/{ImageId}/tag_changes.json
      - GET https://derpibooru.org/filters.json
@@ -395,8 +395,9 @@ paths:
     get:
       tags:
       - Images
-      summary: Gets an image's comments.
-      description: Gets the first page of an images comments.
+      - Comments
+      summary: Gets the first page of an image's comments.
+      description: Gets the first page of an image's comments.
       operationId: getImageComments
       parameters:
       - name: ImageId
@@ -405,6 +406,42 @@ paths:
         required: true
         schema:
           type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  comments:
+                    $ref: '#/components/schemas/Comment'
+                  total:
+                    description: The total number of comments an image has.
+                    type: integer
+                    minimum: 0
+  /images/{ImageId}/comments.json:
+    get:
+      tags:
+      - Images
+      - Comments
+      summary: Gets an image's comments.
+      description: Gets an imag'e's comments.
+      operationId: getImageCommentsPaged
+      parameters:
+      - name: ImageId
+        in: path
+        description: The Id of the image to get the comments for.
+        required: true
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: The page number.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
       responses:
         '200':
           description: Successful operation
