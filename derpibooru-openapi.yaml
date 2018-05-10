@@ -50,7 +50,7 @@ info:
      - [X] GET https://derpibooru.org/images/page/1.json
         - Apparently used to have an &fav=true parameter? [[ref]](https://derpibooru.org/meta/breaking-api-changes/post/1295882#post_1295882)
      - GET https://derpibooru.org/images/{ImageId}/comments.json?page=2
-     - GET https://derpibooru.org/images/{ImageId}/comments_home.json
+     - [X] GET https://derpibooru.org/images/{ImageId}/comments_home.json
      - GET https://derpibooru.org/images/{ImageId}/tag_changes.json
      - GET https://derpibooru.org/filters.json
      - GET https://derpibooru.org/filters/{FilterId}.json
@@ -343,7 +343,7 @@ paths:
     get:
       tags:
       - Images
-      summary: Gets an image by Id.
+      summary: Gets an image.
       description: Gets the details for an image from it's Id.
       operationId: getImageById
       parameters:
@@ -369,7 +369,7 @@ paths:
     get:
       tags:
       - Images
-      summary: Gets an image by Id.
+      summary: Gets an image.
       description: Gets the details for an image from it's Id. This endpoint is the same as `/{ImageId}.json`
       operationId: getImageById2
       parameters:
@@ -391,6 +391,34 @@ paths:
                 - $ref: '#/components/schemas/DeletedImage'
         '404':
           description: Image not found.
+  /images/{ImageId}/comments_home.json:
+    get:
+      tags:
+      - Images
+      summary: Gets an image's comments.
+      description: Gets the first page of an images comments.
+      operationId: getImageComments
+      parameters:
+      - name: ImageId
+        in: path
+        description: The Id of the image to get the  comments for.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  comments:
+                    $ref: '#/components/schemas/Comment'
+                  total:
+                    description: The total number of comments an image has.
+                    type: integer
+                    minimum: 0
   /profiles/{UserNameOrId}:
     get:
       tags:
@@ -399,7 +427,7 @@ paths:
       description: |
         Gets a User's profile by their Name or Id.
 
-        **Warning:** Names take precedence over Ids, so a request for `1234` might actually return the User *named* `1234` instead of the User with Id `1234`! The current suggested workaround is to double check that the response's `id` matches the requested Id and if not, retry with a 0 appended to the requested Id until you get the right user :)
+        **Warning:** Names take precedence over Ids, so a request for `1234` might actually return the User *named* `1234` instead of the User with Id `1234`! **Use the v2 API if you need to get a user by their Id!**
       operationId: getUserProfile
       parameters:
       - name: UserNameOrId
@@ -446,12 +474,15 @@ components:
         comment_count:
           type: integer
           description: The number of comments an image has.
+          minimum: 0
         width:
           type: integer
           description: The width of an image in pixels.
+          minimum: 0
         height:
           type: integer
           description: The height of an image in pixels.
+          minimum: 0
         file_name:
           type: string
           description: The original filename of an image.
@@ -472,12 +503,15 @@ components:
         upvotes:
           type: integer
           description: The number of upvotes the image has.
+          minimum: 0
         downvotes:
           type: integer
           description: The number of downvotes the image has.
+          minimum: 0
         faves:
           type: integer
           description: The number of users who have favorited the image.
+          minimum: 0
         tags:
           type: string
           description: A string containing a list of tags for the image.
@@ -651,15 +685,19 @@ components:
         comment_count:
           type: number
           description: The number of comments the user has made.
+          minimum: 0
         uploads_count:
           type: number
           description: The number of images the user has uploaded.
+          minimum: 0
         post_count:
           type: number
           description: The number of form posts the user has made.
+          minimum: 0
         topic_count:
           type: number
           description: The number of forum topics the user has started.
+          minimum: 0
         links:
           type: "array"
           description: An array of links connecting this user to their artist tags/etc.
@@ -715,6 +753,29 @@ components:
           type: string
           format: date-time
           description: An ISO 8601 date string representing when the user was given the award.
+    Comment:
+      description: A comment on an image.
+      type: object
+      properties:
+        id:
+          type: number
+          description: The id of the comment.
+        body:
+          type: string
+          description: The body of the comment.
+        author:
+          type: string
+          description: The name of the author of the comment.
+        image_id:
+          type: integer
+          description: The id of the image the comment is on.
+        posted_at:
+          type: string
+          format: date-time
+          description: An ISO 8601 date string representing when the comment was posted.
+        deleted:
+          type: boolean
+          description: Whether or not the comment has been deleted.
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
