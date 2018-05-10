@@ -53,8 +53,8 @@ info:
      - [X] GET https://derpibooru.org/images/{ImageId}/comments_home.json
      - [X] GET https://derpibooru.org/images/{ImageId}/tag_changes.json
      - [X] GET https://derpibooru.org/filters.json
-     - GET https://derpibooru.org/filters/{FilterId}.json
-     - GET https://derpibooru.org/channels.json
+     - [X] GET https://derpibooru.org/filters/{FilterId}.json
+     - [X] GET https://derpibooru.org/channels.json
      - GET https://derpibooru.org/channels/{ChannelId}.json
      - GET https://derpibooru.org/comment/{CommentId}.json
      - GET https://derpibooru.org/messages.json
@@ -134,6 +134,8 @@ tags:
 - name: Tags
 - name: Comments
 - name: Lists
+- name: Filters
+- name: Channels
 paths:
   /images.json:
     get:
@@ -551,6 +553,35 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Filter'
+  /channels.json:
+    get:
+      tags:
+      - Channels
+      summary: Gets or searches livestream channels.
+      description: Gets or searches livestream channels.
+      operationId: getChannelList
+      parameters:
+      - name: cq
+        in: query
+        description: An optional search parameter.
+        required: false
+        schema:
+          type: string
+      - name: chan_nsfw
+        in: cookie
+        description: Whether or not to include nsfw channels.
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                description: An array of channels.
+                items:
+                  $ref: '#/components/schemas/Channel'
   /profiles/{UserNameOrId}:
     get:
       tags:
@@ -985,6 +1016,50 @@ components:
           type: number
           description: The id of the user who made the filter.
           nullable: true
+    Channel:
+      description: A livestream channel.
+      type: object
+      properties:
+        short_name:
+          type: string
+          description: The short name of the channel.
+        title:
+          type: string
+          description: The title of the channel.
+        description:
+          type: string
+          description: The description of the channel.
+          nullable: true
+        is_live:
+          type: boolean
+          description: Whether or not the channel is live.
+        nsfw:
+          type: boolean
+          description: Whether or not the channel is nsfw.
+        viewers:
+          type: integer
+          description: The number of people who are viewing the channel.
+          minimum: 0
+        image:
+          type: string
+          format: uri
+          description: The url for the channel's cover image.
+        last_fetched_at:
+          type: string
+          format: date-time
+          description: An ISO 8601 date string representing when the channel's information was last updated.
+        last_live_at:
+          type: string
+          format: date-time
+          description: An ISO 8601 date string representing when the channel was last live.
+        next_check_at:
+          type: string
+          format: date-time
+          description: An ISO 8601 date string representing when the channel's information will be updated next.
+          nullable: true
+        artist_tag:
+          type: string
+          description: the name of the artist tag that the channel is associated with.
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
