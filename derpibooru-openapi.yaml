@@ -56,6 +56,7 @@ info:
      - GET https://derpibooru.org/filters/{FilterId}.json
      - GET https://derpibooru.org/channels.json
      - GET https://derpibooru.org/channels/{ChannelId}.json
+     - GET https://derpibooru.org/comment/{CommentId}.json
      - GET https://derpibooru.org/messages.json
      - GET https://derpibooru.org/messages/{MessageSlug}.json
      - GET https://derpibooru.org/messages/hide/{MessageId}
@@ -154,9 +155,114 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Image'
+                type: object
+                oneOf:
+                - $ref: '#/components/schemas/ImageWithInteractions'
+                - $ref: '#/components/schemas/DeletedImage'
         '404':
           description: Image not found.
+  /images.json:
+    get:
+      tags:
+      - Images
+      summary: Gets a list of images.
+      description: Gets a list of images from the index. You can constrain your results by using the parameters offered here, but you'd be better off using the search enpoint since it's a lot more dynamic and robust!
+      operationId: getIndexImages
+      parameters:
+      - name: constraint
+        in: query
+        description: The type of field to search and sort by. Technically optional, but no other parameter will have an effect unless this one is set.
+        required: false
+        schema:
+          type: string
+          enum: [id, updated, created]
+          description: |
+            The type of field to constrain.
+
+            Options:
+             * `id`  -  To constrain by Id number.
+             * `updated` - To constrain by last update time.
+             * `created` - To constrain by image creation time.
+      - name: page
+        in: query
+        description: The page offset. (Items per page is determined by the current user's settings, or the default of 15)
+        required: false
+        schema:
+          type: number
+          description: The page number.
+      - name: gt
+        in: query
+        description: When specified, filters the results so that the constrained field is greater than this value.
+        required: false
+        schema:
+          type: string
+          description: The value to filter by.
+      - name: gte
+        in: query
+        description: When specified, filters the results so that the constrained field is greater than or equal to this value.
+        required: false
+        schema:
+          type: string
+          description: The value to filter by.
+      - name: lt
+        in: query
+        description: When specified, filters the results so that the constrained field is less than this value.
+        required: false
+        schema:
+          type: string
+          description: The value to filter by.
+      - name: lte
+        in: query
+        description: When specified, filters the results so that the constrained field is less than or equal to this value.
+        required: false
+        schema:
+          type: string
+          description: The value to filter by.
+      - name: order
+        in: query
+        description: The order to sort the results in. Either `a` for ascending or `d` for descending
+        required: false
+        schema:
+          type: string
+          enum: [a, d]
+          description: |
+            The sort order.
+
+            Options:
+             * `a` - ascending.
+             * `d` - descending.
+      - name: deleted
+        in: query
+        description: If present, include deleted images. Can be any value.
+        allowEmptyValue: true
+        schema:
+          type: string
+      - name: random_image
+        in: query
+        description: Documented as ordering the images randomly, however does not work in my testing.
+        allowEmptyValue: true
+        deprecated: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  images:
+                    type: array
+                    items:
+                      oneOf:
+                      - $ref: '#/components/schemas/Image'
+                      - $ref: '#/components/schemas/DeletedImage'
+                  interactions:
+                    description: An array of interactions the current user has done to an image.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Interaction'
   /images/{ImageId}.json:
     get:
       tags:
@@ -177,7 +283,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Image'
+                type: object
+                oneOf:
+                - $ref: '#/components/schemas/ImageWithInteractions'
+                - $ref: '#/components/schemas/DeletedImage'
         '404':
           description: Image not found.
   /profiles/{UserNameOrId}:
@@ -339,11 +448,42 @@ components:
         is_optimized:
           type: boolean
           description: Whether or not the image's previews/thumbnails have been optimized.
-        interactions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Interaction'
-          description: An array of interactions the current user has done to an image.
+    ImageWithInteractions:
+      allOf:
+      - $ref: '#/components/schemas/Image'
+      - type: object
+        properties:
+          interactions:
+            description: An array of interactions the current user has done to an image.
+            type: array
+            items:
+              $ref: '#/components/schemas/Interaction'
+    DeletedImage:
+      description: An image that has been deleted or merged.
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The image's id.
+        created_at:
+          type: string
+          format: date-time
+          description: An ISO 8601 date string representing when the image was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: An ISO 8601 date string representing when the image was uploaded.
+        first_seen_at:
+          type: string
+          format: date-time
+          description: An ISO 8601 date string representing when the image was first seen.
+        duplicate_of:
+          type: integer
+          description: The id of the image this was a duplicate of.
+        uploader_id:
+          type: integer
+          nullable: true
+          description: The id of the uploader, or `null` if it was uploaded anonymously.
     Interaction:
       description: An interaction.
       type: object
@@ -478,5 +618,3 @@ components:
       type: apiKey
       in: query
       name: key
-
-
