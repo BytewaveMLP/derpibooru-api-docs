@@ -130,6 +130,10 @@ servers:
    description: Main canonical domain
  - url: https://trixiebooru.org
    description: Great and powerfull alternate domain.
+security:
+  - {}
+  - ApiKeyAuth: []
+  - LoginSessionCookie: []
 tags:
 - name: Images
 - name: Users
@@ -145,7 +149,10 @@ paths:
       tags:
       - Images
       summary: Gets a list of images.
-      description: Gets a list of images from the index. You can constrain your results by using the parameters offered here, but **you'd be better off using `/search.json`** since it's a lot more dynamic and robust!
+      description: |
+        Gets a list of images from the index. You can constrain your results by using the parameters offered here, but **you'd be better off using `/search.json`** since it's a lot more dynamic and robust!
+
+        **Warn:** Using parameters other than `page` will cause the `page` parameter to be ignored.
       operationId: getIndexImages
       parameters:
       - name: constraint
@@ -225,7 +232,7 @@ paths:
           type: string
       responses:
         '200':
-          description: Successful operation
+          description: OK
           content:
             application/json:
               schema:
@@ -242,12 +249,30 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Interaction'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    description: The status code.
+                    example: 500
+                  error:
+                    type: string
+                    description: The error message.
+                    example: Internal Server Error
   /images/page/{PageNumber}.json:
     get:
       tags:
       - Images
       summary: Gets a list of images.
-      description: Gets a list of images from the index. You can constrain your results by using the parameters offered here, but **you'd be better off using `/search.json`** since it's a lot more dynamic and robust!
+      description: |
+        Gets a list of images from the index. You can constrain your results by using the parameters offered here, but **you'd be better off using `/search.json`** since it's a lot more dynamic and robust!
+
+        **Warn:** Using parameters other than `page` will cause the `page` parameter to be ignored.
       operationId: getIndexImagesWithPage
       parameters:
       - name: PageNumber
@@ -327,7 +352,7 @@ paths:
           type: string
       responses:
         '200':
-          description: Successful operation
+          description: OK
           content:
             application/json:
               schema:
@@ -344,6 +369,21 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Interaction'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    description: The status code.
+                    example: 500
+                  error:
+                    type: string
+                    description: The error message.
+                    example: Internal Server Error
   /{ImageId}.json:
     get:
       tags:
@@ -360,7 +400,7 @@ paths:
           type: integer
       responses:
         '200':
-          description: Successful operation
+          description: OK
           content:
             application/json:
               schema:
@@ -369,7 +409,7 @@ paths:
                 - $ref: '#/components/schemas/ImageWithInteractions'
                 - $ref: '#/components/schemas/DeletedImage'
         '404':
-          description: Image not found.
+          description: Not Found
   /images/{ImageId}.json:
     get:
       tags:
@@ -386,7 +426,7 @@ paths:
           type: integer
       responses:
         '200':
-          description: Successful operation
+          description: OK
           content:
             application/json:
               schema:
@@ -395,7 +435,7 @@ paths:
                 - $ref: '#/components/schemas/ImageWithInteractions'
                 - $ref: '#/components/schemas/DeletedImage'
         '404':
-          description: Image not found.
+          description: Not Found
   /images/{ImageId}/comments_home.json:
     get:
       tags:
@@ -413,7 +453,7 @@ paths:
           type: integer
       responses:
         '200':
-          description: Successful operation
+          description: OK
           content:
             application/json:
               schema:
@@ -425,6 +465,19 @@ paths:
                     description: The total number of comments an image has.
                     type: integer
                     minimum: 0
+        '423':
+          description: Locked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: The response message.
+                    example: This image has been deleted.
+        '404':
+          description: Not Found
   /images/{ImageId}/comments.json:
     get:
       tags:
@@ -449,7 +502,7 @@ paths:
           minimum: 1
       responses:
         '200':
-          description: Successful operation
+          description: OK
           content:
             application/json:
               schema:
@@ -461,13 +514,33 @@ paths:
                     description: The total number of comments an image has.
                     type: integer
                     minimum: 0
+        '423':
+          description: Locked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: The response message.
+                    example: This image has been deleted.
+        '404':
+          description: Not Found
   /images/{ImageId}/tag_changes.json:
     get:
       tags:
       - Images
       - Tags
       summary: Gets an image's tag changes.
-      description: Gets an image's tag changes. **These results are not ordered!**
+      description: |
+        Gets an image's tag changes.
+
+        **Warn:** These results are not ordered.
+
+        **Warn:** Deleted images return an empty object: `{}`
+
+        **Warn:** Non-existant images return a redirect to `/`
       operationId: getImageTagChanges
       parameters:
       - name: ImageId
@@ -485,13 +558,20 @@ paths:
           minimum: 1
       responses:
         '200':
-          description: Successful operation
+          description: OK
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/TagChange'
+                type: object
+                oneOf:
+                - type: array
+                  description: An array of tag changes.
+                  items:
+                    $ref: '#/components/schemas/TagChange'
+                - type: object
+                  description: An empty object.
+        '302':
+          description: Found
   /filters.json:
     get:
       tags:
@@ -514,7 +594,7 @@ paths:
           type: string
       responses:
         '200':
-          description: Successful operation
+          description: OK
           content:
             application/json:
               schema:
@@ -540,7 +620,10 @@ paths:
       tags:
       - Filters
       summary: Gets a filter.
-      description: Gets a filter by it's id.
+      description: |
+        Gets a filter by it's id.
+
+        **Warn:** Non-existant filters return a redirect to `/`
       operationId: getFilterById
       parameters:
       - name: FilterId
@@ -551,11 +634,13 @@ paths:
           type: number
       responses:
         '200':
-          description: Successful operation
+          description: OK
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Filter'
+        '302':
+          description: Found
   /channels.json:
     get:
       tags:
@@ -590,7 +675,10 @@ paths:
       tags:
       - Channels
       summary: Gets a channel.
-      description: Gets a channel by it's Id.
+      description: |
+        Gets a channel by it's Id.
+
+        **Warn:** Non-existant channels return a redirect to `/`
       operationId: getChannelById
       parameters:
       - name: ChannelId
@@ -606,8 +694,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Channel'
-        '404':
-          description: Channel not found!
+        '302':
+          description: Found
   /comment/{CommentId}.json:
     get:
       tags:
@@ -630,8 +718,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Comment'
         '404':
-          description: Comment not found
-  /profiles/{UserNameOrId}:
+          description: Not Found
+  /profiles/{UserNameOrId}.json:
     get:
       tags:
       - Users
@@ -639,7 +727,9 @@ paths:
       description: |
         Gets a User's profile by their Name or Id.
 
-        **Warning:** Names take precedence over Ids, so a request for `1234` might actually return the User *named* `1234` instead of the User with Id `1234`! **Use the v2 API if you need to get a user by their Id!**
+        **Warn:** Names take precedence over Ids (A request for `1234` will return the User *named* `1234` instead the User with Id `1234`). **Use the v2 API if you need to get a user by their Id.**
+
+        **Warn:** Non-existant users return a redirect to `/`
       operationId: getUserProfile
       parameters:
       - name: UserNameOrId
@@ -661,10 +751,15 @@ paths:
           description: User not found.
   /messages.json:
     get:
+      security:
+      - LoginSessionCookie: []
       tags:
       - Messages
       summary: Gets a list of conversations.
-      description: Gets a list of the current user's private messaging conversations.
+      description: |
+        Gets a list of the current user's private messaging conversations.
+
+        **Note:** You must be logged in to access this endpoint. API Keys won't work.
       operationId: getConversations
       parameters: []
       responses:
@@ -677,12 +772,28 @@ paths:
                 description: An array of conversations.
                 items:
                   $ref: '#/components/schemas/Conversation'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: The response message.
+                    example: Sorry, you need to sign in to view this page.
   /messages/{ConversationSlug}.json:
     get:
+      security:
+      - LoginSessionCookie: []
       tags:
       - Messages
       summary: Gets a list of messages in a conversation.
-      description: Gets a list of messages in a conversation.
+      description: |
+        Gets a list of messages in a conversation.
+
+        **Note:** You must be logged in to access this endpoint. API Keys won't work.
       operationId: getMessagesForConversation
       parameters:
       - name: ConversationSlug
@@ -708,6 +819,17 @@ paths:
                 description: An array of messages.
                 items:
                   $ref: '#/components/schemas/Message'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: The response message.
+                    example: Sorry, you need to sign in to view this page.
 components:
   schemas:
     Image:
@@ -935,10 +1057,12 @@ components:
         description:
           type: string
           description: The user's profile description.
+          nullable: true
         avatar_url:
           type: string
           format: uri
           description: The user's avatar.
+          nullable: true
         created_at:
           type: string
           format: date-time
@@ -1150,6 +1274,7 @@ components:
           type: string
           format: date-time
           description: An ISO 8601 date string representing when the channel was last live.
+          nullable: true
         next_check_at:
           type: string
           format: date-time
@@ -1227,6 +1352,12 @@ components:
           description: The id of the conversation this message is a part of.
   securitySchemes:
     ApiKeyAuth:
+      description: This type of auth uses your API Key. You can find it in your account settings.
       type: apiKey
       in: query
       name: key
+    LoginSessionCookie:
+      description: This type of auth uses your login session cookie. You must be logged in to use it.
+      type: apiKey
+      in: cookie
+      name: _booru-on-railsm5_session
