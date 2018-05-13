@@ -57,9 +57,9 @@ info:
      - [X] GET https://derpibooru.org/channels.json
      - [X] GET https://derpibooru.org/channels/{ChannelId}.json
      - [X] GET https://derpibooru.org/comment/{CommentId}.json
-     - GET https://derpibooru.org/messages.json
-     - GET https://derpibooru.org/messages/{MessageSlug}.json
-     - GET https://derpibooru.org/messages/hide/{MessageId}
+     - [X] GET https://derpibooru.org/messages.json
+     - [X] GET https://derpibooru.org/messages/{ConversationSlug}.json
+     - GET https://derpibooru.org/messages/hide/{ConversationId}
      - POST https://derpibooru.org/messages/hide_batch
         - Form!
      - GET https://derpibooru.org/posts/posted.json
@@ -81,10 +81,12 @@ info:
      - GET https://derpibooru.org/lists.json?last=24h
        - last defaults to 3d
      - GET https://derpibooru.org/lists/recent_comments.json
+     - GET https://derpibooru.org/lists/my_comments.json
      - GET https://derpibooru.org/galleries.json
      - GET https://derpibooru.org/galleries/{UserNameOrId}.json
      - GET https://derpibooru.org/galleries/{UserNameOrId}/{GalleryId}.json
        - UserNameOrId is not required and will redirect to the correct one
+     - GET https://derpibooru.org/user_links.json
      - GET https://derpibooru.org/api/v2/tags/fetch_many.json?ids[]={TagId1}&ids[]={TagId2...}
      - GET https://derpibooru.org/api/v2/tags/show.json?id={TagId}
      - GET https://derpibooru.org/api/v2/users/fetch_many.json?ids[]={UserId1}&ids[]={UserId2...}
@@ -136,6 +138,7 @@ tags:
 - name: Lists
 - name: Filters
 - name: Channels
+- name: Messages
 paths:
   /images.json:
     get:
@@ -656,6 +659,55 @@ paths:
                 $ref: '#/components/schemas/User'
         '404':
           description: User not found.
+  /messages.json:
+    get:
+      tags:
+      - Messages
+      summary: Gets a list of conversations.
+      description: Gets a list of the current user's private messaging conversations.
+      operationId: getConversations
+      parameters: []
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                description: An array of conversations.
+                items:
+                  $ref: '#/components/schemas/Conversation'
+  /messages/{ConversationSlug}.json:
+    get:
+      tags:
+      - Messages
+      summary: Gets a list of messages in a conversation.
+      description: Gets a list of messages in a conversation.
+      operationId: getMessagesForConversation
+      parameters:
+      - name: ConversationSlug
+        in: path
+        description: The slug of the conversation to get the messages for.
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: An optional page number.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                description: An array of messages.
+                items:
+                  $ref: '#/components/schemas/Message'
 components:
   schemas:
     Image:
@@ -1106,6 +1158,73 @@ components:
         artist_tag:
           type: string
           description: the name of the artist tag that the channel is associated with.
+    Conversation:
+      description: A private message conversation.
+      type: object
+      properties:
+        id:
+          type: number
+          description: The id of the conversation.
+        title:
+          type: string
+          description: The title of the conversation.
+        to_read:
+          type: boolean
+          description: Whether or not the recipient has read the conversation.
+        from_read:
+          type: boolean
+          description: Whether or not the sender has read the conversation.
+        to_hidden:
+          type: boolean
+          description: Whether or not the recipient has hidden the conversation.
+        from_hidden:
+          type: boolean
+          description: Whether or not the sender has hidden the conversation.
+        created_at:
+          type: string
+          format: date-time
+          description: An ISO 8601 date string representing when the conversation was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: An ISO 8601 date string representing when the conversation was updated.
+        from_id:
+          type: number
+          description: The id of the user who sent the conversation.
+        to_id:
+          type: number
+          description: The id of the user who is recieving the conversation.
+        slug:
+          type: string
+          description: The url slug for the conversation.
+        last_message_at:
+          type: string
+          format: date-time
+          description: An ISO 8601 date string representing when the last message of the conversation was sent.
+    Message:
+      description: A private message.
+      type: object
+      properties:
+        id:
+          type: number
+          description: The id of the message.
+        body:
+          type: string
+          description: The body of the message.
+        created_at:
+          type: string
+          format: date-time
+          description: An ISO 8601 date string representing when the message was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: An ISO 8601 date string representing when the message was updated.
+        from_id:
+          type: number
+          description: The id of the user who sent this message.
+        conversation_id:
+          type: number
+          description: The id of the conversation this message is a part of.
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
