@@ -153,6 +153,7 @@ paths:
         Gets a list of images from the index. You can constrain your results by using the parameters offered here, but **you'd be better off using `/search.json`** since it's a lot more dynamic and robust!
 
         **Warn:** Using parameters other than `page` will cause the `page` parameter to be ignored.
+        **Warn:** Large page numbers may cause `Internal Server Error`s.
       operationId: getIndexImages
       parameters:
       - name: constraint
@@ -273,6 +274,7 @@ paths:
         Gets a list of images from the index. You can constrain your results by using the parameters offered here, but **you'd be better off using `/search.json`** since it's a lot more dynamic and robust!
 
         **Warn:** Using parameters other than `page` will cause the `page` parameter to be ignored.
+        **Warn:** Large page numbers may cause `Internal Server Error`s.
       operationId: getIndexImagesWithPage
       parameters:
       - name: PageNumber
