@@ -59,10 +59,12 @@ info:
      - [X] GET https://derpibooru.org/comment/{CommentId}.json
      - [X] GET https://derpibooru.org/messages.json
      - [X] GET https://derpibooru.org/messages/{ConversationSlug}.json
-     - GET https://derpibooru.org/messages/hide/{ConversationId}
-     - POST https://derpibooru.org/messages/hide_batch
+     - [X] GET https://derpibooru.org/messages/hide/{ConversationId}
+     - [-] POST https://derpibooru.org/messages/hide_batch
         - Form!
-     - GET https://derpibooru.org/posts/posted.json
+     - [-] GET https://derpibooru.org/posts.json
+       - 500: Internal Server Error
+     - [X] GET https://derpibooru.org/posts/posted.json
      - GET https://derpibooru.org/dnp/{DnpId}.json
      - GET https://derpibooru.org/tags.json
      - GET https://derpibooru.org/tags/ratings.json
@@ -82,6 +84,11 @@ info:
        - last defaults to 3d
      - GET https://derpibooru.org/lists/recent_comments.json
      - GET https://derpibooru.org/lists/my_comments.json
+     - GET https://derpibooru.org/lists/user_comments/{UserId}.jso
+     - [X] GET https://derpibooru.org/profiles/{UserNameOrId}.json
+     - GET https://derpibooru.org/profiles/{UserNameOrId}/tag_changes.json?page=2
+     - [-] GET https://derpibooru.org/profiles/{UserNameOrId}/source_changes.json
+       - 500: Internal Server Error
      - GET https://derpibooru.org/galleries.json
      - GET https://derpibooru.org/galleries/{UserNameOrId}.json
      - GET https://derpibooru.org/galleries/{UserNameOrId}/{GalleryId}.json
@@ -664,7 +671,7 @@ paths:
           type: boolean
       responses:
         '200':
-          description: Successful operation
+          description: OK
           content:
             application/json:
               schema:
@@ -691,7 +698,7 @@ paths:
           type: number
       responses:
         '200':
-          description: Successful operation
+          description: OK
           content:
             application/json:
               schema:
@@ -714,7 +721,7 @@ paths:
           type: number
       responses:
         '200':
-          description: Successful operation
+          description: OK
           content:
             application/json:
               schema:
@@ -744,7 +751,7 @@ paths:
           - type: string
       responses:
         '200':
-          description: Successful operation
+          description: OK
           content:
             application/json:
               schema:
@@ -763,10 +770,16 @@ paths:
 
         **Note:** You must be logged in to access this endpoint. API Keys won't work.
       operationId: getConversations
-      parameters: []
+      parameters:
+      - name: with
+        in: query
+        description: An optional User Id to only return conversations involving that user.
+        required: false
+        schema:
+          type: number
       responses:
         '200':
-          description: Successful operation
+          description: OK
           content:
             application/json:
               schema:
@@ -813,7 +826,7 @@ paths:
           minimum: 1
       responses:
         '200':
-          description: Successful operation
+          description: OK
           content:
             application/json:
               schema:
@@ -832,6 +845,74 @@ paths:
                     type: string
                     description: The response message.
                     example: Sorry, you need to sign in to view this page.
+  /messages/hide/{ConversationId}:
+    get:
+      security:
+      - LoginSessionCookie: []
+      - LoginSessionCookie: []
+      tags:
+      - Messages
+      summary: Hides a conversation.
+      description: |
+        Hides a conversation.
+
+        **Note:** You must be logged in to access this endpoint. API Keys won't work.
+
+        **Note:** There is no known way of unhiding messages.
+
+        **Note:** Successfull operation will return a 302 redirect to https://derpibooru.org/messages
+
+        **Note:** Failed operation will return a 302 redirect to https://derpibooru.org/
+      operationId: hideConversation
+      parameters:
+      - name: ConversationId
+        in: path
+        description: The id of the conversation to hide.
+        required: true
+        schema:
+          type: number
+      responses:
+        '302':
+          description: Found
+          headers:
+            Location:
+              schema:
+                type: string
+                format: uri
+  /posts/posted.json:
+    get:
+      tags:
+      - Forums
+      summary: Gets a list of forum posts a user has made.
+      description: |
+        Gets a list of forum posts a has made. If the `user_id` parameter is omited, returns results for the current user.
+
+        **Warn:** If the user is invalid or doesn't exist, redirects to `/`
+      operationId: getPostsByUser
+      parameters:
+      - name: user_id
+        in: query
+        description: The id of the user to get posts for. If the omited, uses the current user.
+        required: false
+        schema:
+          type: number
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                description: An array of forum posts.
+                items:
+                  $ref: '#/components/schemas/ForumPost'
+        '302':
+          description: Found
+          headers:
+            Location:
+              schema:
+                type: string
+                format: uri
 components:
   schemas:
     Image:
@@ -1352,6 +1433,26 @@ components:
         conversation_id:
           type: number
           description: The id of the conversation this message is a part of.
+    ForumPost:
+      description: A forum post.
+      type: object
+      properties:
+        id:
+          type: number
+          description: The id of the post.
+        topic_id:
+          type: number
+          description: The id of the post's topic.
+        body:
+          type: string
+          description: The body of the post.
+        author:
+          type: string
+          description: The Name of the user who wrote the post.
+        subject:
+          type: string
+          description: If this is the first post of a thread, a subject for the thread/post.
+          nullable: true
   securitySchemes:
     ApiKeyAuth:
       description: This type of auth uses your API Key. You can find it in your account settings.
