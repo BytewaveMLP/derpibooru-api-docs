@@ -52,6 +52,13 @@ info:
      - [X] GET https://derpibooru.org/images/{ImageId}/comments.json?page=2
      - [X] GET https://derpibooru.org/images/{ImageId}/comments_home.json
      - [X] GET https://derpibooru.org/images/{ImageId}/tag_changes.json
+     - [-] GET https://derpibooru.org/images/{ImageId}/reporting.json
+       - 500: Internal Server Error
+     - [-] GET https://derpibooru.org/images/{ImageId}/favouriters.json
+       - 500: Internal Server Error
+     - [-] GET https://derpibooru.org/images/{ImageId}/source_changes.json
+       - 500: Internal Server Error
+     - [X] GET https://derpibooru.org/related/{ImageId}.json?hidden=1
      - [X] GET https://derpibooru.org/filters.json
      - [X] GET https://derpibooru.org/filters/{FilterId}.json
      - [X] GET https://derpibooru.org/channels.json
@@ -65,6 +72,7 @@ info:
      - [-] GET https://derpibooru.org/posts.json
        - 500: Internal Server Error
      - [X] GET https://derpibooru.org/posts/posted.json
+     - GET https://derpibooru.org/posts/search.json?author=&subject=&forum_id=&body=&sf=created_at&sd=desc&commit=Search
      - GET https://derpibooru.org/dnp/{DnpId}.json
      - GET https://derpibooru.org/tags.json
      - GET https://derpibooru.org/tags/ratings.json
@@ -84,12 +92,12 @@ info:
        - last defaults to 3d
      - GET https://derpibooru.org/lists/recent_comments.json
      - GET https://derpibooru.org/lists/my_comments.json
-     - GET https://derpibooru.org/lists/user_comments/{UserId}.jso
+     - GET https://derpibooru.org/lists/user_comments/{UserId}.json
      - [X] GET https://derpibooru.org/profiles/{UserNameOrId}.json
      - GET https://derpibooru.org/profiles/{UserNameOrId}/tag_changes.json?page=2
      - [-] GET https://derpibooru.org/profiles/{UserNameOrId}/source_changes.json
        - 500: Internal Server Error
-     - GET https://derpibooru.org/galleries.json
+     - GET https://derpibooru.org/galleries.json?title=&description=&creator=&include_image=&sf=created_at&sd=desc&commit=Search
      - GET https://derpibooru.org/galleries/{UserNameOrId}.json
      - GET https://derpibooru.org/galleries/{UserNameOrId}/{GalleryId}.json
        - UserNameOrId is not required and will redirect to the correct one
@@ -224,6 +232,14 @@ paths:
         allowEmptyValue: true
         schema:
           type: string
+      - name: hidden
+        in: query
+        description: If set to 1, includes hidden images.
+        required: false
+        schema:
+          type: number
+          minimum: 0
+          maximum: 1
       - name: page
         in: query
         description: The page offset. (Items per page is determined by the current user's settings, or the default of 15). **Does not work if other parameters are set!**
@@ -352,6 +368,14 @@ paths:
         allowEmptyValue: true
         schema:
           type: string
+      - name: hidden
+        in: query
+        description: If set to 1, includes hidden images.
+        required: false
+        schema:
+          type: number
+          minimum: 0
+          maximum: 1
       - name: random_image
         in: query
         description: Documented as ordering the images randomly, however does not work in my testing.
@@ -581,6 +605,45 @@ paths:
                   description: An empty object.
         '302':
           description: Found
+  /related/{ImageId}.json
+    get:
+      tags:
+      - Images
+      summary: Gets a list of related images.
+      description: Gets a list of images related to the specified image.
+      operationId: getRelatedImage
+      parameters:
+      - name: ImageId
+        in: path
+        description: The id of the image to get images related to.
+        required: true
+        schema:
+          type: number
+      - name: hidden
+        in: query
+        description: If set to 1, includes hidden images.
+        required: false
+        schema:
+          type: number
+          minimum: 0
+          maximum: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  images:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Image'
+                  interactions:
+                    description: An array of interactions the current user has done to an image.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Interaction'
   /filters.json:
     get:
       tags:
