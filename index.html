@@ -17,7 +17,7 @@
   <meta property="og:url" content="https://derpi-api.nerd.horse">
   <meta property="og:description" content="Unofficial api documentation for https://derpibooru.org">
   <meta property="article:published_time" content="2018-05-06">
-  <meta property="article:author" content="http://cyberpon3.deviantart.com">
+  <meta property="article:author" content="https://twitter.com/CyberPon3">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@CyberPon3">
@@ -46,6 +46,7 @@
       window.ui = SwaggerUIBundle({
         url: "./derpibooru-openapi.gen.yaml",
         dom_id: '#swagger-ui',
+        docExpansion: 'none',
         deepLinking: true,
         presets: [SwaggerUIBundle.presets.apis]
       });
