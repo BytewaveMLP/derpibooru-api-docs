@@ -605,7 +605,7 @@ paths:
                   description: An empty object.
         '302':
           description: Found
-  /related/{ImageId}.json
+  /related/{ImageId}.json:
     get:
       tags:
       - Images
