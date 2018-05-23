@@ -1,0 +1,37 @@
+tags:
+- Images
+summary: Gets a list of related images.
+description: Gets a list of images related to the specified image.
+operationId: getRelatedImage
+parameters:
+- name: ImageId
+  in: path
+  description: The id of the image to get images related to.
+  required: true
+  schema:
+    type: number
+- name: hidden
+  in: query
+  description: If set to 1, includes hidden images.
+  required: false
+  schema:
+    type: number
+    minimum: 0
+    maximum: 1
+responses:
+  '200':
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            images:
+              type: array
+              items:
+                $ref: '#/components/schemas/Image'
+            interactions:
+              description: An array of interactions the current user has done to an image.
+              type: array
+              items:
+                $ref: '#/components/schemas/Interaction'

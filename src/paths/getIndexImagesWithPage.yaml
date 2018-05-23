@@ -1,0 +1,127 @@
+tags:
+- Images
+summary: Gets a list of images.
+description: |
+  Gets a list of images from the index. You can constrain your results by using the parameters offered here, but **you'd be better off using `/search.json`** since it's a lot more dynamic and robust!
+
+  **Warn:** Using parameters other than `page` will cause the `page` parameter to be ignored.
+  **Warn:** Large page numbers may cause `Internal Server Error`s.
+operationId: getIndexImagesWithPage
+parameters:
+- name: PageNumber
+  in: path
+  description: The page offset. (Items per page is determined by the current user's settings, or the default of 15). **Does not work if other parameters are set!**
+  required: true
+  schema:
+    type: number
+    description: The page number.
+- name: constraint
+  in: query
+  description: The type of field to search and sort by.
+  required: false
+  schema:
+    type: string
+    enum: [id, updated, created]
+    description: |
+      The type of field to constrain.
+
+      Options:
+       * `id`  -  To constrain by Id number.
+       * `updated` - To constrain by last update time.
+       * `created` - To constrain by image creation time.
+- name: gt
+  in: query
+  description: When specified, filters the results so that the constrained field is greater than this value. **Requires the `constraint` parameter.**
+  required: false
+  schema:
+    type: string
+    description: The value to filter by.
+- name: gte
+  in: query
+  description: When specified, filters the results so that the constrained field is greater than or equal to this value. **Requires the `constraint` parameter.**
+  required: false
+  schema:
+    type: string
+    description: The value to filter by.
+- name: lt
+  in: query
+  description: When specified, filters the results so that the constrained field is less than this value. **Requires the `constraint` parameter.**
+  required: false
+  schema:
+    type: string
+    description: The value to filter by.
+- name: lte
+  in: query
+  description: When specified, filters the results so that the constrained field is less than or equal to this value. **Requires the `constraint` parameter.**
+  required: false
+  schema:
+    type: string
+    description: The value to filter by.
+- name: order
+  in: query
+  description: The order to sort the results in. Either `a` for ascending or `d` for descending.  **Requires the `constraint` parameter.**
+  required: false
+  schema:
+    type: string
+    enum: [a, d]
+    description: |
+      The sort order.
+      
+      Options:
+       * `a` - ascending.
+       * `d` - descending.
+- name: deleted
+  in: query
+  description: If present, include deleted images. Can be any value.
+  allowEmptyValue: true
+  schema:
+    type: string
+- name: hidden
+  in: query
+  description: If set to 1, includes hidden images.
+  required: false
+  schema:
+    type: number
+    minimum: 0
+    maximum: 1
+- name: random_image
+  in: query
+  description: Documented as ordering the images randomly, however does not work in my testing.
+  allowEmptyValue: true
+  deprecated: true
+  schema:
+    type: string
+responses:
+  '200':
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            images:
+              type: array
+              items:
+                oneOf:
+                - $ref: '#/components/schemas/Image'
+                - $ref: '#/components/schemas/DeletedImage'
+            interactions:
+              description: An array of interactions the current user has done to an image.
+              type: array
+              items:
+                $ref: '#/components/schemas/Interaction'
+  '500':
+    description: Internal Server Error
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: number
+              description: The status code.
+              example: 500
+            error:
+              type: string
+              description: The error message.
+              example: Internal Server Error

@@ -1,0 +1,42 @@
+description: A private message conversation.
+type: object
+properties:
+  id:
+    type: number
+    description: The id of the conversation.
+  title:
+    type: string
+    description: The title of the conversation.
+  to_read:
+    type: boolean
+    description: Whether or not the recipient has read the conversation.
+  from_read:
+    type: boolean
+    description: Whether or not the sender has read the conversation.
+  to_hidden:
+    type: boolean
+    description: Whether or not the recipient has hidden the conversation.
+  from_hidden:
+    type: boolean
+    description: Whether or not the sender has hidden the conversation.
+  created_at:
+    type: string
+    format: date-time
+    description: An ISO 8601 date string representing when the conversation was created.
+  updated_at:
+    type: string
+    format: date-time
+    description: An ISO 8601 date string representing when the conversation was updated.
+  from_id:
+    type: number
+    description: The id of the user who sent the conversation.
+  to_id:
+    type: number
+    description: The id of the user who is recieving the conversation.
+  slug:
+    type: string
+    description: The url slug for the conversation.
+  last_message_at:
+    type: string
+    format: date-time
+    description: An ISO 8601 date string representing when the last message of the conversation was sent.

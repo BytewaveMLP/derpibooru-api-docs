@@ -1,0 +1,32 @@
+security:
+- LoginSessionCookie: []
+- LoginSessionCookie: []
+tags:
+- Messages
+summary: Hides a conversation.
+description: |
+  Hides a conversation.
+
+  **Note:** You must be logged in to access this endpoint. API Keys won't work.
+
+  **Note:** There is no known way of unhiding messages.
+
+  **Note:** Successfull operation will return a 302 redirect to https://derpibooru.org/messages
+
+  **Note:** Failed operation will return a 302 redirect to https://derpibooru.org/
+operationId: hideConversation
+parameters:
+- name: ConversationId
+  in: path
+  description: The id of the conversation to hide.
+  required: true
+  schema:
+    type: number
+responses:
+  '302':
+    description: Found
+    headers:
+      Location:
+        schema:
+          type: string
+          format: uri

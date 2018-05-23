@@ -1,0 +1,9 @@
+allOf:
+- $ref: '#/components/schemas/Image'
+- type: object
+  properties:
+    interactions:
+      description: An array of interactions the current user has done to an image.
+      type: array
+      items:
+        $ref: '#/components/schemas/Interaction'

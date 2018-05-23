@@ -1,0 +1,23 @@
+description: A private message.
+type: object
+properties:
+  id:
+    type: number
+    description: The id of the message.
+  body:
+    type: string
+    description: The body of the message.
+  created_at:
+    type: string
+    format: date-time
+    description: An ISO 8601 date string representing when the message was created.
+  updated_at:
+    type: string
+    format: date-time
+    description: An ISO 8601 date string representing when the message was updated.
+  from_id:
+    type: number
+    description: The id of the user who sent this message.
+  conversation_id:
+    type: number
+    description: The id of the conversation this message is a part of.

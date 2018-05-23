@@ -1,0 +1,27 @@
+tags:
+- Channels
+summary: Gets or searches livestream channels.
+description: Gets or searches livestream channels.
+operationId: getChannelList
+parameters:
+- name: cq
+  in: query
+  description: An optional search parameter.
+  required: false
+  schema:
+    type: string
+- name: chan_nsfw
+  in: cookie
+  description: Whether or not to include nsfw channels.
+  schema:
+    type: boolean
+responses:
+  '200':
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: array
+          description: An array of channels.
+          items:
+            $ref: '#/components/schemas/Channel'

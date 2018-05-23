@@ -1,0 +1,62 @@
+description: A user's profile.
+type: object
+properties:
+  id:
+    type: number
+    description: The id of the user.
+  name:
+    type: string
+    description: The name of the user.
+  slug:
+    type: string
+    format: uri
+    description: The url slug of the user.
+  role:
+    type: string
+    enum: [admin, moderator, user]
+    description: |
+      The role of the user.
+      
+      Options:
+       * `admin` - A site Administrator.
+       * `moderator` - A site Moderator.
+       * `user` - A normal User.
+  description:
+    type: string
+    description: The user's profile description.
+    nullable: true
+  avatar_url:
+    type: string
+    format: uri
+    description: The user's avatar.
+    nullable: true
+  created_at:
+    type: string
+    format: date-time
+    description: An ISO 8601 date string representing when the user was created.
+  comment_count:
+    type: number
+    description: The number of comments the user has made.
+    minimum: 0
+  uploads_count:
+    type: number
+    description: The number of images the user has uploaded.
+    minimum: 0
+  post_count:
+    type: number
+    description: The number of form posts the user has made.
+    minimum: 0
+  topic_count:
+    type: number
+    description: The number of forum topics the user has started.
+    minimum: 0
+  links:
+    type: "array"
+    description: An array of links connecting this user to their artist tags/etc.
+    items:
+      $ref: '#/components/schemas/UserLink'
+  awards:
+    type: "array"
+    description: An array of awards this user has earned.
+    items:
+      $ref: '#/components/schemas/UserAward'

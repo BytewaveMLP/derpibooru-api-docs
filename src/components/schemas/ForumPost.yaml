@@ -1,0 +1,19 @@
+description: A forum post.
+type: object
+properties:
+  id:
+    type: number
+    description: The id of the post.
+  topic_id:
+    type: number
+    description: The id of the post's topic.
+  body:
+    type: string
+    description: The body of the post.
+  author:
+    type: string
+    description: The Name of the user who wrote the post.
+  subject:
+    type: string
+    description: If this is the first post of a thread, a subject for the thread/post.
+    nullable: true

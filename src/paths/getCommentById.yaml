@@ -1,0 +1,21 @@
+tags:
+- Comments
+summary: Gets a comment.
+description: Gets a comment by it's Id.
+operationId: getCommentById
+parameters:
+- name: CommentId
+  in: path
+  description: The Id of the comment.
+  required: true
+  schema:
+    type: number
+responses:
+  '200':
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/Comment'
+  '404':
+    description: Not Found

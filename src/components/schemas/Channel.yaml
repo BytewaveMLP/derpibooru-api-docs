@@ -1,0 +1,44 @@
+description: A livestream channel.
+type: object
+properties:
+  short_name:
+    type: string
+    description: The short name of the channel.
+  title:
+    type: string
+    description: The title of the channel.
+  description:
+    type: string
+    description: The description of the channel.
+    nullable: true
+  is_live:
+    type: boolean
+    description: Whether or not the channel is live.
+  nsfw:
+    type: boolean
+    description: Whether or not the channel is nsfw.
+  viewers:
+    type: integer
+    description: The number of people who are viewing the channel.
+    minimum: 0
+  image:
+    type: string
+    format: uri
+    description: The url for the channel's cover image.
+  last_fetched_at:
+    type: string
+    format: date-time
+    description: An ISO 8601 date string representing when the channel's information was last updated.
+  last_live_at:
+    type: string
+    format: date-time
+    description: An ISO 8601 date string representing when the channel was last live.
+    nullable: true
+  next_check_at:
+    type: string
+    format: date-time
+    description: An ISO 8601 date string representing when the channel's information will be updated next.
+    nullable: true
+  artist_tag:
+    type: string
+    description: the name of the artist tag that the channel is associated with.

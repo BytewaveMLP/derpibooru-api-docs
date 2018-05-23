@@ -1,0 +1,10 @@
+ApiKeyAuth:
+  description: This type of auth uses your API Key. You can find it in your account settings.
+  type: apiKey
+  in: query
+  name: key
+LoginSessionCookie:
+  description: This type of auth uses your login session cookie. You must be logged in to use it.
+  type: apiKey
+  in: cookie
+  name: _booru-on-railsm5_session

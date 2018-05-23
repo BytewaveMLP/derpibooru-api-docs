@@ -1,0 +1,24 @@
+tags:
+- Filters
+summary: Gets a filter.
+description: |
+  Gets a filter by it's id.
+
+  **Warn:** Non-existant filters return a redirect to `/`
+operationId: getFilterById
+parameters:
+- name: FilterId
+  in: path
+  description: The Id of the filter.
+  required: true
+  schema:
+    type: number
+responses:
+  '200':
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/Filter'
+  '302':
+    description: Found

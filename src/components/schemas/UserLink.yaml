@@ -1,0 +1,22 @@
+description: Links a user to a tag. From the web interface, it looks like it should have a url as well but it doesn't include that for some reason?
+type: object
+properties:
+  user_id:
+    type: number
+    description: The id of the user.
+  created_at:
+    type: string
+    format: date-time
+    description: An ISO 8601 date string representing when the user link was created.
+  state:
+    type: string
+    enum: [verified, unverified]
+    description: |
+      The state of the link.
+      
+      Options:
+       * `verified`  - The link has been verified.
+       * `unverified?` - The link has been verified. (I'm guessing on this one - someone should make a new link and test this for me :P)
+  tag_id:
+    type: number
+    description: The id of the tag.

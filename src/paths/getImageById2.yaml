@@ -1,0 +1,24 @@
+tags:
+- Images
+summary: Gets an image.
+description: Gets the details for an image from it's Id. This endpoint is the same as `/{ImageId}.json`
+operationId: getImageById2
+parameters:
+- name: ImageId
+  in: path
+  description: The Id of the image to get.
+  required: true
+  schema:
+    type: integer
+responses:
+  '200':
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          oneOf:
+          - $ref: '#/components/schemas/ImageWithInteractions'
+          - $ref: '#/components/schemas/DeletedImage'
+  '404':
+    description: Not Found

@@ -1,0 +1,22 @@
+description: A comment on an image.
+type: object
+properties:
+  id:
+    type: number
+    description: The id of the comment.
+  body:
+    type: string
+    description: The body of the comment.
+  author:
+    type: string
+    description: The name of the user who wrote the comment.
+  image_id:
+    type: integer
+    description: The id of the image the comment is on.
+  posted_at:
+    type: string
+    format: date-time
+    description: An ISO 8601 date string representing when the comment was posted.
+  deleted:
+    type: boolean
+    description: Whether or not the comment has been deleted.

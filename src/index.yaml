@@ -1,0 +1,28 @@
+openapi: 3.0.0
+info:
+  $ref: ./info/index.yaml
+externalDocs:
+  description: Derpibooru's official api docs (good luck)
+  url: https://derpibooru.org/pages/api
+servers:
+ - url: https://derpibooru.org
+   description: Main canonical domain
+ - url: https://trixiebooru.org
+   description: Great and powerfull alternate domain.
+security:
+  - {}
+  - ApiKeyAuth: []
+  - LoginSessionCookie: []
+tags:
+- name: Images
+- name: Users
+- name: Tags
+- name: Comments
+- name: Lists
+- name: Filters
+- name: Channels
+- name: Messages
+paths:
+  $ref: ./paths/index.yaml
+components:
+  $ref: ./components/index.yaml

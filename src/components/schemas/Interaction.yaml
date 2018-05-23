@@ -1,0 +1,26 @@
+description: An interaction.
+type: object
+properties:
+  id:
+    type: integer
+    description: The id of the interaction.
+  interaction_type:
+    type: string
+    enum: [faved, voted, hidden]
+    description: |
+      The type of interaction.
+      
+      Options:
+       * `faved`  - The user favorited the image.
+       * `voted`  - The user voted on the image.
+       * `hidden` - The user hid the image.
+  value:
+    type: string
+    nullable: true
+    description: The value of the interaction. (For example, "voted" interaction types can have a value of "up" or "down")
+  user_id:
+    type: integer
+    description: The id of the user who made the interaction.
+  image_id:
+    type: integer
+    description: The id of the image which the interaction is for.

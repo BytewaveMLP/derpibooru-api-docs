@@ -1,0 +1,56 @@
+description: A search filter.
+type: object
+properties:
+  id:
+    type: number
+    description: The id of the filter.
+  name:
+    type: string
+    description: The name of the filter.
+  description:
+    type: string
+    description: The description of the filter.
+  hidden_tag_ids:
+    type: array
+    description: An array of tag ids that are hidden.
+    items:
+      type: number
+      description: The hidden tag's id.
+  spoilered_tag_ids:
+    type: array
+    description: An array of tag ids that are spoilered.
+    items:
+      type: number
+      description: The spoilered tag's id.
+  spoilered_tags:
+    type: array
+    description: An array of tag names that are spoilered.
+    items:
+      type: string
+      description: The spoilered tag's name.
+  hidden_tags:
+    type: array
+    description: An array of tag namess that are hidden.
+    items:
+      type: string
+      description: The hidden tag's name.
+  hidden_complex:
+    type: string
+    description: A complex filter for images to hide.
+  spoilered_complex:
+    type: string
+    description: A complex filter for images to spoiler.
+  public:
+    type: boolean
+    description: Whether or not the filter is public.
+  system:
+    type: boolean
+    description: Whether or not the filter is a system filter.
+  user_count:
+    type: integer
+    description: The number of users that are using the filter.
+    minimum: 0
+  user_id:
+    type: number
+    description: The id of the user who made the filter.
+    nullable: true

@@ -1,0 +1,28 @@
+tags:
+- Users
+summary: Gets a User's profile.
+description: |
+  Gets a User's profile by their Name or Id.
+
+  **Warn:** Names take precedence over Ids (A request for `1234` will return the User *named* `1234` instead the User with Id `1234`). **Use the v2 API if you need to get a user by their Id.**
+
+  **Warn:** Non-existant users return a redirect to `/`
+operationId: getUserProfile
+parameters:
+- name: UserNameOrId
+  in: path
+  description: The Name or Id of the User to get.
+  required: true
+  schema:
+    oneOf:
+    - type: integer
+    - type: string
+responses:
+  '200':
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/User'
+  '404':
+    description: User not found.

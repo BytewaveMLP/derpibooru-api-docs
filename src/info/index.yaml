@@ -1,0 +1,137 @@
+title: Derpibooru API
+version: 0.0.1
+description: |
+  Unofficial api documentation for [https://derpibooru.org](https://derpibooru.org).
+
+  Note that because the Derpibooru api is weird, I won't guarantee that the properties/methods/etc described here will always be correct \[](/rdwut).
+
+  ## From the official docs:
+  > ### API
+  > Derpibooru provides a JSON API for major site functionality, which can be freely used by anyone wanting to produce tools for the site or other webapps that use the data provided within Derpibooru.
+  > ### Licensing
+  > Licensing of the API is simple - anyone can use it, users making abusively high numbers of requests may be asked to stop. Your application MUST properly cache, respect server-side cache expiry times. Your client MUST gracefully back off if requests fail (eg non-200 HTTP code), preferably exponentially or fatally.
+  >
+  > Credit MUST always be given to the site in the form of a link. If images are used, the artist MUST always be credited (if provided) and the original source URL MUST be displayed alongside the image, either in textual form or as a link. A link to the Derpibooru page is optional but recommended; we recommend the derpibooru.org domain as a canonical domain. The https protocol MUST be specified on all URIs; Derpibooru does not support plaintext HTTP connections.
+  >
+  > ### Accessing the API
+  > Most methods support API access by appending the extension .json to a URL. For requests that require authentication, the URL parameter "key" should be appended. This key provides limited access to a user's account. This key can be found by users on their account page. For instance, to access a user"s watched feed, the request /images/watched.json?key=-Od-dTiwcf9dN2djrhlN would be made.
+  >
+  > Methods dealing with large feeds are paginated; the "page" parameter controls the page you're on. The number of images per page can be set with the "perpage" parameter. The default is 15 unless you use your key and have changed the "Images per page" option on the settings page.
+  >
+  > Search endpoints are controlled by the current user's filter (or the default, if no key is supplied); if you wish to use a custom filter, you can use the "filter_id" parameter.
+
+  ## Overview
+  Since the api is a bit funny and has some quirks, I'll clarify and explain some things myself:
+
+  ### Endpoints v1
+  Derpibooru's API v1 endpoints are the same as normal pages. You can get API data from MOST pages by appending `.json` to the URL or adding an `Accept: application/json` HTTP header to your request. For example: To get the data for image 1 ([https://derpibooru.org/1](https://derpibooru.org/1)), you would make a request to [https://derpibooru.org/1.json](https://derpibooru.org/1.json).
+
+  ### Endpoints v2
+  A few years ago, v2 of the API started showing up, using a semi-standard url structure: `/api/v2/{entity}/{endpoint}.json`. It's never been documented and is still pretty inconsistent.
+
+  ### Endpoints v3
+  API v3 has been mentioned a few times but is just wishful thinking as far as I know... [[ref1]](https://derpibooru.org/meta/feature-suggestions-and-discussion/post/193607#post_193607) [[ref2]](https://derpibooru.org/meta/api-update/post/2354594#post_2354594)
+
+  ### Authentication
+  Some requests, like getting a user's watched images, require you to be authenticated as a user. This is done by adding a `key` URL parameter with the user's API Key. For example: [https://derpibooru.org/images/watched.json?key=-Od-dTiwcf9dN2djrhlN](https://derpibooru.org/images/watched.json?key=-Od-dTiwcf9dN2djrhlN).
+  API Keys provide limited access to a user's account and can be found on their account page. Be careful not to leak it since it the only way of changing it is to ask for it to be manually reset [[ref1]](https://derpibooru.org/meta/quick-question-about-apis-and-login/post/2636861#post_2636861) [[ref2]](https://derpibooru.org/meta/derpibooru-dl-stopped-working-possible-change-in-how-api-results-are-returned/post/3628439#post_3628439). (Note you can also use the same auth cookies from the website since you'd be logged in that way too)
+
+  ### Filters
+  All image searches are limited by the current filter. Authenticated requests will always use the currently selected filter for that user. Unauthenticated requests will default to the "default" filter, but a different one can be chosen by using the `filter_id` URL Parameter. You can use any filter with this parameter - even ones that aren't public.
+
+  ### Pagination
+  Many results on Derpibooru are paginated. The `page` URL Parameter can be used to to control what page you're on. Some endpoints allow the use of a `perpage` URL Parameter to specify how many results to show per page, though this is rather inconsistent (some endpoints use the current user's settings or only allow the default).
+
+  ### TODO:
+  This is just a list of endpoints I've found that I need to document, you can ignore this •c•
+   - [X] GET https://derpibooru.org/images.json
+   - [X] GET https://derpibooru.org/images/page/1.json
+      - Apparently used to have an &fav=true parameter? [[ref]](https://derpibooru.org/meta/breaking-api-changes/post/1295882#post_1295882)
+   - [X] GET https://derpibooru.org/images/{ImageId}/comments.json?page=2
+   - [X] GET https://derpibooru.org/images/{ImageId}/comments_home.json
+   - [X] GET https://derpibooru.org/images/{ImageId}/tag_changes.json
+   - [-] GET https://derpibooru.org/images/{ImageId}/reporting.json
+     - 500: Internal Server Error
+   - [-] GET https://derpibooru.org/images/{ImageId}/favouriters.json
+     - 500: Internal Server Error
+   - [-] GET https://derpibooru.org/images/{ImageId}/source_changes.json
+     - 500: Internal Server Error
+   - [X] GET https://derpibooru.org/related/{ImageId}.json?hidden=1
+   - [X] GET https://derpibooru.org/filters.json
+   - [X] GET https://derpibooru.org/filters/{FilterId}.json
+   - [X] GET https://derpibooru.org/channels.json
+   - [X] GET https://derpibooru.org/channels/{ChannelId}.json
+   - [X] GET https://derpibooru.org/comment/{CommentId}.json
+   - [X] GET https://derpibooru.org/messages.json
+   - [X] GET https://derpibooru.org/messages/{ConversationSlug}.json
+   - [X] GET https://derpibooru.org/messages/hide/{ConversationId}
+   - [-] POST https://derpibooru.org/messages/hide_batch
+      - Form!
+   - [-] GET https://derpibooru.org/posts.json
+     - 500: Internal Server Error
+   - [X] GET https://derpibooru.org/posts/posted.json
+   - GET https://derpibooru.org/posts/search.json?author=&subject=&forum_id=&body=&sf=created_at&sd=desc&commit=Search
+   - GET https://derpibooru.org/dnp/{DnpId}.json
+   - GET https://derpibooru.org/tags.json
+   - GET https://derpibooru.org/tags/ratings.json
+   - GET https://derpibooru.org/tags/aliases.json
+   - GET https://derpibooru.org/tags/implied.json
+   - GET https://derpibooru.org/tags/{TagNameOrId}.json
+   - GET https://derpibooru.org/tags/autocomplete.json?term=pon
+     - term must be 3 or more chars
+   - GET https://derpibooru.org/{ForumName}.json
+   - GET https://derpibooru.org/{ForumName}/{TopicName}.json
+   - GET https://derpibooru.org/{ForumName}/{TopicName}/{PageNumber}.json
+   - GET https://derpibooru.org/{ForumName}/{TopicName}/post/{PostId}.json
+     - returns the page the post is on, not the post itself
+   - GET https://derpibooru.org/forums/{ForumName}.json
+   - GET https://derpibooru.org/forums/{ForumName}/{TopicName}.json
+   - GET https://derpibooru.org/lists.json?last=24h
+     - last defaults to 3d
+   - GET https://derpibooru.org/lists/recent_comments.json
+   - GET https://derpibooru.org/lists/my_comments.json
+   - GET https://derpibooru.org/lists/user_comments/{UserId}.json
+   - [X] GET https://derpibooru.org/profiles/{UserNameOrId}.json
+   - GET https://derpibooru.org/profiles/{UserNameOrId}/tag_changes.json?page=2
+   - [-] GET https://derpibooru.org/profiles/{UserNameOrId}/source_changes.json
+     - 500: Internal Server Error
+   - GET https://derpibooru.org/galleries.json?title=&description=&creator=&include_image=&sf=created_at&sd=desc&commit=Search
+   - GET https://derpibooru.org/galleries/{UserNameOrId}.json
+   - GET https://derpibooru.org/galleries/{UserNameOrId}/{GalleryId}.json
+     - UserNameOrId is not required and will redirect to the correct one
+   - GET https://derpibooru.org/user_links.json
+   - GET https://derpibooru.org/api/v2/tags/fetch_many.json?ids[]={TagId1}&ids[]={TagId2...}
+   - GET https://derpibooru.org/api/v2/tags/show.json?id={TagId}
+   - GET https://derpibooru.org/api/v2/users/fetch_many.json?ids[]={UserId1}&ids[]={UserId2...}
+   - GET https://derpibooru.org/api/v2/users/show.json?id={UserId}
+   - GET https://derpibooru.org/api/v2/images/show.json?ids=1,2,3
+     - This one also works without the .json
+   - GET https://derpibooru.org/api/v2/images/show.json?id_numbers=841846,913527
+     - I don't think this works anymore
+   - GET https://derpibooru.org/api/v2/notifications/unread.json
+   - PUT https://derpibooru.org/api/v2/notifications/watch?
+   - PUT https://derpibooru.org/api/v2/notifications/unwatch?
+   - GET https://derpibooru.org/api/v2/interactions/interacted.json?class=Image&ids=1725734
+     - Used to be https://derpibooru.org/api/v2/interactions/interacted.json?class=Image&ids=556feeed636872357b110d00, looks like the id format changed sometime? Maybe [here](https://derpibooru.org/meta/api-update/post/2354568#post_2354568)?
+   - PUT https://derpibooru.org/api/v2/interactions/fave
+     - `> {"class":"Image","id":"1722317","value":"true","_method":"PUT"}`
+     - `< {"score":758,"favourites":581,"upvotes":758,"downvotes":0,"votes":758}`
+     - value = true | false
+     - Reportedly also works in the format /api/v2/interactions/fave?class=Image&id=image_id&value=true - will need tested [[ref]](https://derpibooru.org/meta/userscript-derpibooru-image-slideshow/post/1276458#post_1276458)
+   - PUT https://derpibooru.org/api/v2/interactions/vote
+     - `> {"class":"Image","id":"1696887","value":"down","_method":"PUT"}`
+     - `< {"score":170,"favourites":114,"upvotes":177,"downvotes":7,"votes":184}`
+     - value = up | down | false
+   - PUT https://derpibooru.org/api/v2/interactions/hide
+     - `> {"class":"Image","id":"1702318","value":"true","_method":"PUT"}`
+     - `< {"score":4,"favourites":18,"upvotes":23,"downvotes":19,"votes":42}`
+     - value = true | false
+
+  ## Client Libraries:
+   - [node-derpi](https://github.com/BytewaveMLP/node-derpi) (node.js)
+   - [DerPyBooru](https://github.com/joshua-stone/DerPyBooru) (Python)
+   - [derpigo](https://github.com/Xe/derpigo) (Go)
+
+  ## Other Links:
+
+termsOfService: https://derpibooru.org/pages/rules

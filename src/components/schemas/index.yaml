@@ -1,0 +1,28 @@
+Image:
+  $ref: ./Image.yaml
+ImageWithInteractions:
+  $ref: ./ImageWithInteractions.yaml
+DeletedImage:
+  $ref: ./DeletedImage.yaml
+Interaction:
+  $ref: ./Interaction.yaml
+User:
+  $ref: ./User.yaml
+UserLink:
+  $ref: ./UserLink.yaml
+UserAward:
+  $ref: ./UserAward.yaml
+Comment:
+  $ref: ./Comment.yaml
+TagChange:
+  $ref: ./TagChange.yaml
+Filter:
+  $ref: ./Filter.yaml
+Channel:
+  $ref: ./Channel.yaml
+Conversation:
+  $ref: ./Conversation.yaml
+Message:
+  $ref: ./Message.yaml
+ForumPost:
+  $ref: ./ForumPost.yaml

@@ -1,0 +1,4 @@
+schemas:
+  $ref: ./schemas/index.yaml
+securitySchemes:
+  $ref: ./securitySchemes.yaml

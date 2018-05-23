@@ -1,0 +1,54 @@
+/images.json:
+  get:
+    $ref: ./getIndexImages.yaml
+/images/page/{PageNumber}.json:
+  get:
+    $ref: ./getIndexImagesWithPage.yaml
+/{ImageId}.json:
+  get:
+    $ref: ./getImageById.yaml
+/images/{ImageId}.json:
+  get:
+    $ref: ./getImageById2.yaml
+/images/{ImageId}/comments_home.json:
+  get:
+    $ref: ./getImageCommentsHome.yaml
+/images/{ImageId}/comments.json:
+  get:
+    $ref: ./getImageComments.yaml
+/images/{ImageId}/tag_changes.json:
+  get:
+    $ref: ./getImageTagChanges.yaml
+/related/{ImageId}.json:
+  get:
+    $ref: ./getRelatedImage.yaml
+/filters.json:
+  get:
+    $ref: ./getFilters.yaml
+/filters/{FilterId}.json:
+  get:
+    $ref: ./getFilterById.yaml
+/channels.json:
+  get:
+    $ref: ./getChannelList.yaml
+/channels/{ChannelId}.json:
+  get:
+    $ref: ./getChannelById.yaml
+/comment/{CommentId}.json:
+  get:
+    $ref: ./getCommentById.yaml
+/profiles/{UserNameOrId}.json:
+  get:
+    $ref: ./getUserProfile.yaml
+/messages.json:
+  get:
+    $ref: ./getConversations.yaml
+/messages/{ConversationSlug}.json:
+  get:
+    $ref: ./getMessagesForConversation.yaml
+/messages/hide/{ConversationId}:
+  get:
+    $ref: ./hideConversation.yaml
+/posts/posted.json:
+  get:
+    $ref: ./getPostsByUser.yaml

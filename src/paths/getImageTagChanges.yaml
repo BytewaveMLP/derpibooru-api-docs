@@ -1,0 +1,43 @@
+tags:
+- Images
+- Tags
+summary: Gets an image's tag changes.
+description: |
+  Gets an image's tag changes.
+
+  **Warn:** These results are not ordered.
+
+  **Warn:** Deleted images return an empty object: `{}`
+
+  **Warn:** Non-existant images return a redirect to `/`
+operationId: getImageTagChanges
+parameters:
+- name: ImageId
+  in: path
+  description: The Id of the image to get the comments for.
+  required: true
+  schema:
+    type: integer
+- name: page
+  in: query
+  description: The page number.
+  required: false
+  schema:
+    type: integer
+    minimum: 1
+responses:
+  '200':
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          oneOf:
+          - type: array
+            description: An array of tag changes.
+            items:
+              $ref: '#/components/schemas/TagChange'
+          - type: object
+            description: An empty object.
+  '302':
+    description: Found

@@ -1,0 +1,40 @@
+tags:
+- Images
+- Comments
+summary: Gets the first page of an image's comments.
+description: Gets the first page of an image's comments.
+operationId: getImageCommentsHome
+parameters:
+- name: ImageId
+  in: path
+  description: The Id of the image to get the  comments for.
+  required: true
+  schema:
+    type: integer
+responses:
+  '200':
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            comments:
+              $ref: '#/components/schemas/Comment'
+            total:
+              description: The total number of comments an image has.
+              type: integer
+              minimum: 0
+  '423':
+    description: Locked
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              description: The response message.
+              example: This image has been deleted.
+  '404':
+    description: Not Found

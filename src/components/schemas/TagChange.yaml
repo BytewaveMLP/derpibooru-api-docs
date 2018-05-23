@@ -1,0 +1,19 @@
+description: A tag change on an image.
+type: object
+properties:
+  added:
+    type: boolean
+    description: Whether the tag was added or removed (`true` = added, `false` = removed).
+  id:
+    type: number
+    description: The id of the tag change.
+  image_id:
+    type: integer
+    description: The id of the image the tag was changed on.
+  tag_name:
+    type: string
+    nullable: true
+    description: The name of the tag that was added or removed. Could also be null for some reason.
+  user:
+    type: string
+    description: The name of the user who changed the tag.

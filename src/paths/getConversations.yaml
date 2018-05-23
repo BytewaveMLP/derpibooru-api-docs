@@ -1,0 +1,38 @@
+security:
+- LoginSessionCookie: []
+tags:
+- Messages
+summary: Gets a list of conversations.
+description: |
+  Gets a list of the current user's private messaging conversations.
+
+  **Note:** You must be logged in to access this endpoint. API Keys won't work.
+operationId: getConversations
+parameters:
+- name: with
+  in: query
+  description: An optional User Id to only return conversations involving that user.
+  required: false
+  schema:
+    type: number
+responses:
+  '200':
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: array
+          description: An array of conversations.
+          items:
+            $ref: '#/components/schemas/Conversation'
+  '403':
+    description: Forbidden
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              description: The response message.
+              example: Sorry, you need to sign in to view this page.

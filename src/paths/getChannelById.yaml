@@ -1,0 +1,24 @@
+tags:
+- Channels
+summary: Gets a channel.
+description: |
+  Gets a channel by it's Id.
+
+  **Warn:** Non-existant channels return a redirect to `/`
+operationId: getChannelById
+parameters:
+- name: ChannelId
+  in: path
+  description: The Id of the channel.
+  required: true
+  schema:
+    type: number
+responses:
+  '200':
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/Channel'
+  '302':
+    description: Found

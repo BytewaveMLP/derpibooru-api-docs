@@ -1,0 +1,32 @@
+tags:
+- Forums
+summary: Gets a list of forum posts a user has made.
+description: |
+  Gets a list of forum posts a has made. If the `user_id` parameter is omited, returns results for the current user.
+
+  **Warn:** If the user is invalid or doesn't exist, redirects to `/`
+operationId: getPostsByUser
+parameters:
+- name: user_id
+  in: query
+  description: The id of the user to get posts for. If the omited, uses the current user.
+  required: false
+  schema:
+    type: number
+responses:
+  '200':
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: array
+          description: An array of forum posts.
+          items:
+            $ref: '#/components/schemas/ForumPost'
+  '302':
+    description: Found
+    headers:
+      Location:
+        schema:
+          type: string
+          format: uri

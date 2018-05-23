@@ -1,0 +1,25 @@
+description: An image that has been deleted or merged.
+type: object
+properties:
+  id:
+    type: integer
+    description: The image's id.
+  created_at:
+    type: string
+    format: date-time
+    description: An ISO 8601 date string representing when the image was created.
+  updated_at:
+    type: string
+    format: date-time
+    description: An ISO 8601 date string representing when the image was uploaded.
+  first_seen_at:
+    type: string
+    format: date-time
+    description: An ISO 8601 date string representing when the image was first seen.
+  duplicate_of:
+    type: integer
+    description: The id of the image this was a duplicate of.
+  uploader_id:
+    type: integer
+    nullable: true
+    description: The id of the uploader, or `null` if it was uploaded anonymously.

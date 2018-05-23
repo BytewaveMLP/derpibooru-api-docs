@@ -1,0 +1,41 @@
+tags:
+- Filters
+summary: Gets or searches for available filters.
+description: Gets or searches for available filters.
+operationId: getFilters
+parameters:
+- name: fq
+  in: query
+  description: An optional search query. Results will be in `search_filters`.
+  required: false
+  schema:
+    type: string
+- name: search_desc
+  in: query
+  description: If present, search through filter descriptions. Can be any value.
+  allowEmptyValue: true
+  schema:
+    type: string
+responses:
+  '200':
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            system_filters:
+              description: An array of the system filters.
+              type: array
+              items:
+                $ref: '#/components/schemas/Filter'
+            user_filters:
+              description: An array of the filters the current user created.
+              type: array
+              items:
+                $ref: '#/components/schemas/Filter'
+            search_filters:
+              description: An array of filter search results.
+              type: array
+              items:
+                $ref: '#/components/schemas/Filter'
