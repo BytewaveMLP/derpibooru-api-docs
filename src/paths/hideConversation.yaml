@@ -1,12 +1,11 @@
 security:
+- ApiKeyAuth: []
 - LoginSessionCookie: []
 tags:
 - Messages
 summary: Hides a conversation.
 description: |
   Hides a conversation.
-
-  **Note:** You must be logged in to access this endpoint. API Keys won't work.
 
   **Note:** There is no known way of unhiding messages.
 
