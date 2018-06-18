@@ -686,7 +686,10 @@ paths:
                 type: object
                 properties:
                   comments:
-                    $ref: '#/components/schemas/Comment'
+                    type: array
+                    description: An array of comments.
+                    items:
+                      $ref: '#/components/schemas/Comment'
                   total:
                     description: The total number of comments an image has.
                     type: integer
@@ -1083,16 +1086,12 @@ paths:
   /messages.json:
     get:
       security:
+        - ApiKeyAuth: []
         - LoginSessionCookie: []
       tags:
         - Messages
       summary: Gets a list of conversations.
-      description: >
-        Gets a list of the current user's private messaging conversations.
-
-
-        **Note:** You must be logged in to access this endpoint. API Keys won't
-        work.
+      description: Gets a list of the current user's private messaging conversations.
       operationId: getConversations
       parameters:
         - name: with
@@ -1127,16 +1126,12 @@ paths:
   '/messages/{ConversationSlug}.json':
     get:
       security:
+        - ApiKeyAuth: []
         - LoginSessionCookie: []
       tags:
         - Messages
       summary: Gets a list of messages in a conversation.
-      description: >
-        Gets a list of messages in a conversation.
-
-
-        **Note:** You must be logged in to access this endpoint. API Keys won't
-        work.
+      description: Gets a list of messages in a conversation.
       operationId: getMessagesForConversation
       parameters:
         - name: ConversationSlug
@@ -1176,16 +1171,13 @@ paths:
   '/messages/hide/{ConversationId}':
     get:
       security:
+        - ApiKeyAuth: []
         - LoginSessionCookie: []
       tags:
         - Messages
       summary: Hides a conversation.
       description: >
         Hides a conversation.
-
-
-        **Note:** You must be logged in to access this endpoint. API Keys won't
-        work.
 
 
         **Note:** There is no known way of unhiding messages.
