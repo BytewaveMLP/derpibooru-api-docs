@@ -1,4 +1,4 @@
 schemas:
-  $ref: ./schemas/index.yaml
+  $ref: ./schemas/_index.yaml
 securitySchemes:
   $ref: ./securitySchemes.yaml

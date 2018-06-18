@@ -1,0 +1,32 @@
+description: A new filter.
+type: object
+properties:
+  filter[name]:
+    type: string
+    description: The name of the filter.
+  filter[description]:
+    type: string
+    description: The description of the filter.
+  filter[spoilered_tag_list]:
+    type: string
+    description: A comma seperated list of tags to spoiler.
+  filter[hidden_tag_list]:
+    type: string
+    description: A comma seperated list of tags to hide.
+  filter[spoilered_complex_str]:
+    type: string
+    description: A complex string to spoiler (Uses search syntax).
+  filter[hidden_complex_str]:
+    type: string
+    description: A complex string to hide (Uses search syntax).
+  filter[public]:
+    type: boolean
+    description: Whether or not the filter is public.
+example:
+  filter[name]: My new filter
+  filter[description]: A brand new filter made by me.
+  filter[spoilered_tag_list]: equestria girls, human
+  filter[hidden_tag_list]: explicit
+  filter[spoilered_complex_str]: irl && !pony
+  filter[hidden_complex_str]: score.lte:-10
+  filter[public]: false

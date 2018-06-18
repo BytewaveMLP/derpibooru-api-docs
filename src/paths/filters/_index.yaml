@@ -1,0 +1,4 @@
+get:
+  $ref: ./GET.yaml
+post:
+  $ref: ./POST.yaml

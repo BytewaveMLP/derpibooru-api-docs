@@ -1,0 +1,31 @@
+security:
+- ApiKeyAuth: []
+- LoginSessionCookie: []
+tags:
+- Filters
+summary: Creates a new filter.
+description: Creates a new filter.
+operationId: createFilter
+requestBody:
+  description: A new filter.
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '#/components/schemas/FilterCreateJson'
+    application/x-www-form-urlencoded:
+      schema:
+        $ref: '#/components/schemas/FilterCreateForm'
+responses:
+  '201':
+    description: Created
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/Filter'
+  '422':
+    description: Unprocessable Entity
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/UnprocessableEntity'

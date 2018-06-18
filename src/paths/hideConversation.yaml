@@ -1,6 +1,5 @@
 security:
 - LoginSessionCookie: []
-- LoginSessionCookie: []
 tags:
 - Messages
 summary: Hides a conversation.

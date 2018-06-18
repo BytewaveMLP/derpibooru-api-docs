@@ -23,11 +23,9 @@
   get:
     $ref: ./getRelatedImage.yaml
 /filters.json:
-  get:
-    $ref: ./getFilters.yaml
+  $ref: ./filters/_index.yaml
 /filters/{FilterId}.json:
-  get:
-    $ref: ./getFilterById.yaml
+  $ref: ./filters__{FilterId}/_index.yaml
 /channels.json:
   get:
     $ref: ./getChannelList.yaml

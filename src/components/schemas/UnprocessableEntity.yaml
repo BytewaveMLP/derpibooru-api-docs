@@ -1,0 +1,9 @@
+description: A map of invalid properties and their validation errors.
+type: object
+additionalProperties:
+  type: array
+  items:
+    type: string
+example:
+  name:
+  - can't be blank

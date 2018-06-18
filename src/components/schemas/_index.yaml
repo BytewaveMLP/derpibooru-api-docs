@@ -18,6 +18,14 @@ TagChange:
   $ref: ./TagChange.yaml
 Filter:
   $ref: ./Filter.yaml
+FilterCreateJson:
+  $ref: ./FilterCreateJson.yaml
+FilterCreateForm:
+  $ref: ./FilterCreateForm.yaml
+FilterEditJson:
+  $ref: ./FilterEditJson.yaml
+FilterEditForm:
+  $ref: ./FilterEditForm.yaml
 Channel:
   $ref: ./Channel.yaml
 Conversation:

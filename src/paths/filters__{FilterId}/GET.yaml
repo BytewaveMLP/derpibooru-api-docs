@@ -4,7 +4,7 @@ summary: Gets a filter.
 description: |
   Gets a filter by it's id.
 
-  **Warn:** Non-existant filters return a redirect to `/`
+  **Warn:** Filters that you don't own or don't exist will return a redirect to `/`
 operationId: getFilterById
 parameters:
 - name: FilterId

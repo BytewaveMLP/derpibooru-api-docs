@@ -824,8 +824,11 @@ paths:
                     items:
                       $ref: '#/components/schemas/Filter'
                   user_filters:
-                    description: An array of the filters the current user created.
+                    description: >-
+                      An array of the filters the current user created. (Will be
+                      null if there is no current user.)
                     type: array
+                    nullable: true
                     items:
                       $ref: '#/components/schemas/Filter'
                   search_filters:
@@ -833,15 +836,49 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Filter'
+    post:
+      security:
+        - ApiKeyAuth: []
+        - LoginSessionCookie: []
+      tags:
+        - Filters
+      summary: Creates a new filter.
+      description: Creates a new filter.
+      operationId: createFilter
+      requestBody:
+        description: A new filter.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FilterCreateJson'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FilterCreateForm'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Filter'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnprocessableEntity'
   '/filters/{FilterId}.json':
     get:
       tags:
         - Filters
       summary: Gets a filter.
-      description: |
+      description: >
         Gets a filter by it's id.
 
-        **Warn:** Non-existant filters return a redirect to `/`
+
+        **Warn:** Filters that you don't own or don't exist will return a
+        redirect to `/`
       operationId: getFilterById
       parameters:
         - name: FilterId
@@ -857,6 +894,78 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Filter'
+        '302':
+          description: Found
+    put:
+      security:
+        - ApiKeyAuth: []
+        - LoginSessionCookie: []
+      tags:
+        - Filters
+      summary: Edits a filter.
+      description: >
+        Edits a filter.
+
+
+        **Warn:** Filters that you don't own or don't exist will return a
+        redirect to `/`
+      operationId: editFilter
+      parameters:
+        - name: FilterId
+          in: path
+          description: The Id of the filter.
+          required: true
+          schema:
+            type: number
+      requestBody:
+        description: A modified filter.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FilterEditJson'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FilterEditForm'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Filter'
+        '302':
+          description: Found
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnprocessableEntity'
+    delete:
+      security:
+        - ApiKeyAuth: []
+        - LoginSessionCookie: []
+      tags:
+        - Filters
+      summary: Deletes a filter.
+      description: >
+        Deletes a filter by it's id.
+
+
+        **Warn:** Filters that you don't own or don't exist will return a
+        redirect to `/`
+      operationId: deleteFilter
+      parameters:
+        - name: FilterId
+          in: path
+          description: The Id of the filter.
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: OK
         '302':
           description: Found
   /channels.json:
@@ -1067,7 +1176,6 @@ paths:
   '/messages/hide/{ConversationId}':
     get:
       security:
-        - LoginSessionCookie: []
         - LoginSessionCookie: []
       tags:
         - Messages
@@ -1569,6 +1677,140 @@ components:
           type: number
           description: The id of the user who made the filter.
           nullable: true
+    FilterCreateJson:
+      description: A new filter.
+      type: object
+      properties:
+        filter:
+          description: The new filter.
+          type: object
+          properties:
+            name:
+              type: string
+              description: The name of the filter.
+            description:
+              type: string
+              description: The description of the filter.
+            spoilered_tag_list:
+              type: string
+              description: A comma seperated list of tags to spoiler.
+            hidden_tag_list:
+              type: string
+              description: A comma seperated list of tags to hide.
+            spoilered_complex_str:
+              type: string
+              description: A complex string to spoiler (Uses search syntax).
+            hidden_complex_str:
+              type: string
+              description: A complex string to hide (Uses search syntax).
+            public:
+              type: boolean
+              description: Whether or not the filter is public.
+      example:
+        filter:
+          name: My new filter
+          description: A brand new filter made by me.
+          spoilered_tag_list: 'equestria girls, human'
+          hidden_tag_list: explicit
+          spoilered_complex_str: irl && !pony
+          hidden_complex_str: 'score.lte:-10'
+          public: false
+    FilterCreateForm:
+      description: A new filter.
+      type: object
+      properties:
+        'filter[name]':
+          type: string
+          description: The name of the filter.
+        'filter[description]':
+          type: string
+          description: The description of the filter.
+        'filter[spoilered_tag_list]':
+          type: string
+          description: A comma seperated list of tags to spoiler.
+        'filter[hidden_tag_list]':
+          type: string
+          description: A comma seperated list of tags to hide.
+        'filter[spoilered_complex_str]':
+          type: string
+          description: A complex string to spoiler (Uses search syntax).
+        'filter[hidden_complex_str]':
+          type: string
+          description: A complex string to hide (Uses search syntax).
+        'filter[public]':
+          type: boolean
+          description: Whether or not the filter is public.
+      example:
+        'filter[name]': My new filter
+        'filter[description]': A brand new filter made by me.
+        'filter[spoilered_tag_list]': 'equestria girls, human'
+        'filter[hidden_tag_list]': explicit
+        'filter[spoilered_complex_str]': irl && !pony
+        'filter[hidden_complex_str]': 'score.lte:-10'
+        'filter[public]': false
+    FilterEditJson:
+      description: A new filter.
+      type: object
+      properties:
+        filter:
+          description: The new filter.
+          type: object
+          properties:
+            name:
+              type: string
+              description: The name of the filter.
+            description:
+              type: string
+              description: The description of the filter.
+            spoilered_tag_list:
+              type: string
+              description: A comma seperated list of tags to spoiler.
+            hidden_tag_list:
+              type: string
+              description: A comma seperated list of tags to hide.
+            spoilered_complex_str:
+              type: string
+              description: A complex string to spoiler (Uses search syntax).
+            hidden_complex_str:
+              type: string
+              description: A complex string to hide (Uses search syntax).
+      example:
+        filter:
+          name: My new filter
+          description: A brand new filter made by me.
+          spoilered_tag_list: 'equestria girls, human'
+          hidden_tag_list: explicit
+          spoilered_complex_str: irl && !pony
+          hidden_complex_str: 'score.lte:-10'
+    FilterEditForm:
+      description: A new filter.
+      type: object
+      properties:
+        'filter[name]':
+          type: string
+          description: The name of the filter.
+        'filter[description]':
+          type: string
+          description: The description of the filter.
+        'filter[spoilered_tag_list]':
+          type: string
+          description: A comma seperated list of tags to spoiler.
+        'filter[hidden_tag_list]':
+          type: string
+          description: A comma seperated list of tags to hide.
+        'filter[spoilered_complex_str]':
+          type: string
+          description: A complex string to spoiler (Uses search syntax).
+        'filter[hidden_complex_str]':
+          type: string
+          description: A complex string to hide (Uses search syntax).
+      example:
+        'filter[name]': My new filter
+        'filter[description]': A brand new filter made by me.
+        'filter[spoilered_tag_list]': 'equestria girls, human'
+        'filter[hidden_tag_list]': explicit
+        'filter[spoilered_complex_str]': irl && !pony
+        'filter[hidden_complex_str]': 'score.lte:-10'
     Channel:
       description: A livestream channel.
       type: object

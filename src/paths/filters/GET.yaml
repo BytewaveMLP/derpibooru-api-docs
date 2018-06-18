@@ -30,8 +30,9 @@ responses:
               items:
                 $ref: '#/components/schemas/Filter'
             user_filters:
-              description: An array of the filters the current user created.
+              description: An array of the filters the current user created. (Will be null if there is no current user.)
               type: array
+              nullable: true
               items:
                 $ref: '#/components/schemas/Filter'
             search_filters:
