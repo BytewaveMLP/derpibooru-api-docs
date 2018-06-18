@@ -1,0 +1,30 @@
+description: A forum topic.
+type: object
+properties:
+  id:
+    type: string
+    description: A numerical string representing the id of the topic.
+  slug:
+    type: string
+    description: The slug of the topic.
+  title:
+    type: string
+    description: The title of the topic.
+  sticky:
+    type: boolean
+    description: Whether or not the topic is pinned to the top of the forum.
+  created_at:
+    type: string
+    format: date-time
+    description: An ISO 8601 date string representing when the topic was created.
+  updated_at:
+    type: string
+    format: date-time
+    description: An ISO 8601 date string representing when the topic was last updated.
+  forum_id:
+    type: string
+    description: A numerical string representing the id of the topic's forum.
+  last_replied_to_at:
+    type: string
+    format: date-time
+    description: An ISO 8601 date string representing when the topic was last replied to.

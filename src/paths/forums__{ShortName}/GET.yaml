@@ -1,0 +1,32 @@
+tags:
+- Forums
+summary: Gets a forum's topics.
+description: Gets a forum's topics by it's short name.
+operationId: getForumIndex
+parameters:
+- name: ShortName
+  in: path
+  description: The short name of the forum.
+  required: true
+  schema:
+    type: string
+- name: page
+  in: query
+  description: The page number.
+  schema:
+    type: number
+responses:
+  '200':
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            topics:
+              type: array
+              description: An array of forum topics.
+              items:
+                $ref: '#/components/schemas/ForumTopic'
+  '404':
+    description: Not Found

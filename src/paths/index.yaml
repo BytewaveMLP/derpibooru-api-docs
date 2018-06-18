@@ -50,3 +50,5 @@
 /posts/posted.json:
   get:
     $ref: ./getPostsByUser.yaml
+/forums/{ShortName}:
+  $ref: ./forums__{ShortName}/_index.yaml
