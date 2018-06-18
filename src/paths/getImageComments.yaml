@@ -27,7 +27,10 @@ responses:
           type: object
           properties:
             comments:
-              $ref: '#/components/schemas/Comment'
+              type: array
+              description: An array of comments.
+              items:
+                $ref: '#/components/schemas/Comment'
             total:
               description: The total number of comments an image has.
               type: integer
