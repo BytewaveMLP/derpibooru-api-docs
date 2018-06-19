@@ -18,7 +18,8 @@ properties:
     description: An ISO 8601 date string representing when the image was first seen.
   duplicate_of:
     type: integer
-    description: The id of the image this was a duplicate of.
+    nullable: true
+    description: The id of the image this was a duplicate of (may be null).
   uploader_id:
     type: integer
     nullable: true

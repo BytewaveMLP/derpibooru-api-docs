@@ -1321,7 +1321,9 @@ components:
           description: The description of an image (Using derpibooru's formatting syntax).
         uploader:
           type: string
-          description: The name of the uploader.
+          description: >-
+            The name of the uploader, or `Background Pony` if it was uploaded
+            anonymously.
         uploader_id:
           type: integer
           nullable: true
@@ -1329,7 +1331,7 @@ components:
         image:
           type: string
           format: uri
-          description: The canonical direct url for the image.
+          description: The view url for the image.
         upvotes:
           type: integer
           description: The number of upvotes the image has.
@@ -1408,12 +1410,22 @@ components:
               type: string
               format: uri
               description: The full image.
+            webm:
+              type: string
+              format: uri
+              nullable: true
+              description: 'If the image is animated, a webm version.'
+            mp4:
+              type: string
+              format: uri
+              nullable: true
+              description: 'If the image is animated, an mp4 version.'
         is_rendered:
           type: boolean
           description: Whether or not the image's previews/thumbnails have been rendered.
         is_optimized:
           type: boolean
-          description: Whether or not the image's previews/thumbnails have been optimized.
+          description: Whether or not the image has been optimized.
     ImageWithInteractions:
       allOf:
         - $ref: '#/components/schemas/Image'
@@ -1445,7 +1457,8 @@ components:
           description: An ISO 8601 date string representing when the image was first seen.
         duplicate_of:
           type: integer
-          description: The id of the image this was a duplicate of.
+          nullable: true
+          description: The id of the image this was a duplicate of (may be null).
         uploader_id:
           type: integer
           nullable: true
