@@ -7,10 +7,6 @@ info:
     [https://derpibooru.org](https://derpibooru.org).
 
 
-    Note that because the Derpibooru api is weird, I won't guarantee that the
-    properties/methods/etc described here will always be correct \[](/rdwut).
-
-
     ## From the official docs:
 
     > ### API
@@ -64,9 +60,6 @@ info:
 
     ## Overview
 
-    Since the api is a bit funny and has some quirks, I'll clarify and explain
-    some things myself:
-
 
     ### Endpoints v1
 
@@ -85,28 +78,16 @@ info:
     and is still pretty inconsistent.
 
 
-    ### Endpoints v3
-
-    API v3 has been mentioned a few times but is just wishful thinking as far as
-    I know...
-    [[ref1]](https://derpibooru.org/meta/feature-suggestions-and-discussion/post/193607#post_193607)
-    [[ref2]](https://derpibooru.org/meta/api-update/post/2354594#post_2354594)
-
-
     ### Authentication
 
-    Some requests, like getting a user's watched images, require you to be
-    authenticated as a user. This is done by adding a `key` URL parameter with
-    the user's API Key. For example:
-    [https://derpibooru.org/images/watched.json?key=-Od-dTiwcf9dN2djrhlN](https://derpibooru.org/images/watched.json?key=-Od-dTiwcf9dN2djrhlN).
-
-    API Keys provide limited access to a user's account and can be found on
-    their account page. Be careful not to leak it since it the only way of
-    changing it is to ask for it to be manually reset
+    There are two ways to authenticate: Using a session cookie or using an api
+    key. Changes made using a session cookie also require a csrf token. To use
+    an api key, simply add it using the `key` url parameter. The api key can be
+    found on a user's account settings page (https://derpibooru.org/users/edit).
+    **Be sure to keep your key a secret - It can be used to login as you and the
+    only way of changing it is to ask for it to be manually reset
     [[ref1]](https://derpibooru.org/meta/quick-question-about-apis-and-login/post/2636861#post_2636861)
-    [[ref2]](https://derpibooru.org/meta/derpibooru-dl-stopped-working-possible-change-in-how-api-results-are-returned/post/3628439#post_3628439).
-    (Note you can also use the same auth cookies from the website since you'd be
-    logged in that way too)
+    [[ref2]](https://derpibooru.org/meta/derpibooru-dl-stopped-working-possible-change-in-how-api-results-are-returned/post/3628439#post_3628439)**
 
 
     ### Filters
